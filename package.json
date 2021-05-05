@@ -1,0 +1,28 @@
+{
+  "name": "tf-critics-discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjuanrivvera99/tf-critics-discord-bot.git"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "jjuanrivvera99",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjuanrivvera99/tf-critics-discord-bot/issues"
+  },
+  "homepage": "https://github.com/jjuanrivvera99/tf-critics-discord-bot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^9.0.0",
+    "mongoose": "^5.12.7"
+  }
+}
