@@ -17,5 +17,5 @@ module.exports = {
                 await message.channel.send("An error ocurred performing this action").then(msg => msg.delete({ timeout: 3000 }))
             }
         }
-	},
+	}
 };

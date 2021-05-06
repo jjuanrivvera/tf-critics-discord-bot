@@ -1,6 +1,18 @@
 const { Guild } = require('../models');
 
 module.exports = {
+    async memberIsProtected(member, guild) {
+        const guildModel = await Guild.findOne({ id: guild.id });
+        
+        const hasRole = member.roles.cache.some(role => guildModel.protectedRoles.includes(role.name));
+
+        if (hasRole) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
     async memberHasModRole(member, guild) {
         const guildModel = await Guild.findOne({ id: guild.id });
         

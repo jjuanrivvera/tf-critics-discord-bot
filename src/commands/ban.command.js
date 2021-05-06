@@ -17,7 +17,7 @@ module.exports.run = async (message, args) => {
 
     if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
 
-        if (await MemberHelper.memberHasModRole(member, message.guild) || member.bannable === false) {
+        if (await MemberHelper.memberIsProtected(member, message.guild) || member.bannable === false) {
             await message.channel.send("I can't ban this user").then(msg => msg.delete({ timeout: 3000 }))
         } else {
             await message.guild.members.ban(member);
