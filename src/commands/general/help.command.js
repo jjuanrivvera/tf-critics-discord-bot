@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const Command = require('../models/command.model');
+const Command = require('../../models/command.model');
 
 module.exports.run = async (message, args) => {
     const group = args.length ? args[0] : "User";

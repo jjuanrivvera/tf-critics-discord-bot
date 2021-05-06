@@ -6,19 +6,20 @@ const discordToken = process.env.DISCORD_TOKEN;
 
 module.exports = {
     loadCommands() {
-        //Discord commands collection
         discordClient.commands = new Discord.Collection();
 
-        const files = fs.readdirSync('./src/commands/').filter(file => file.endsWith('.js'));
+        const commandFolders = fs.readdirSync('./src/commands');
 
-        for (const file of files) {
-            const command = require(`./commands/${file}`);
-            // set a new item in the Collection
-            // with the key as the command name and the value as the exported module
-            discordClient.commands.set(command.config.command, command);
-            console.log(`Command ${command.config.name} loaded`);
+        for (const folder of commandFolders) {
+            const commandFiles = fs.readdirSync(`./src/commands/${folder}`).filter(file => file.endsWith('.js'));
+            for (const file of commandFiles) {
+                const command = require(`./commands/${folder}/${file}`);
+                discordClient.commands.set(command.config.command, command);
+                console.log(`${command.config.name} Command loaded`);
+            }
         }
     },
+
     loadEvents() {
         const eventFiles = fs.readdirSync('./src/events').filter(file => file.endsWith('.js'));
 
@@ -32,6 +33,7 @@ module.exports = {
             }
         }
     },
+    
     login() {
         discordClient.login(discordToken);
     }

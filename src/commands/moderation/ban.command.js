@@ -1,4 +1,4 @@
-const { MemberHelper } = require('../helpers/index');
+const { MemberHelper } = require('../../helpers/index');
 
 module.exports.run = async (message, args) => {
     if (args.length <= 0) {
@@ -18,12 +18,12 @@ module.exports.run = async (message, args) => {
     if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
 
         if (await MemberHelper.memberIsProtected(member, message.guild) || member.bannable === false) {
-            await message.channel.send("I can't ban this user").then(msg => msg.delete({ timeout: 3000 }))
+            await message.channel.send("I can't ban this user").then(msg => msg.delete({ timeout: 3000 }));
         } else {
             await message.guild.members.ban(member);
         }
     } else {
-        await message.channel.send("You are ot authorized to perform this action").then(msg => msg.delete({ timeout: 3000 }))
+        await message.channel.send("You are ot authorized to perform this action").then(msg => msg.delete({ timeout: 3000 }));
     }
 }
 

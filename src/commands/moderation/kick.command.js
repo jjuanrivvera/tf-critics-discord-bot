@@ -1,4 +1,4 @@
-const { MemberHelper } = require('../helpers/index');
+const { MemberHelper } = require('../../helpers/index');
 
 module.exports.run = async (message, args) => {
     if (args.length <= 0) {
