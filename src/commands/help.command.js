@@ -1,36 +1,25 @@
 const { MessageEmbed } = require('discord.js');
 const Command = require('../models/command.model');
 
-const getCommandsEmbed = async (group = "User") => {
+module.exports.run = async (message, args) => {
+    const group = args.length ? args[0] : "User";
     const commands = await Command.find({ group: group});
 
-    let commandEmbed = [];
-    let help = new MessageEmbed().setColor("0x1D82B6");
-    help.setTitle("Available Command List");
+    if (!commands.length) {
+        return await message.channel.send("Wrong command or group").then(msg => msg.delete({ timeout: 3000 }))
+    }
+
+    const commandEmbed = new MessageEmbed().setColor("0x1D82B6");
+    commandEmbed.setTitle("Available Command List");
 
     commands.forEach(function(command) {
-        help.addField(`${command.name}`, `**Description:** ${command.description}\n**Usage:** ${command.usage}`);
-        commandEmbed.push(command);
+        commandEmbed.addField(`${command.name}`, `**Description:** ${command.description}\n**Usage:** ${command.usage}`);
     });
 
-    return help;
-};
-
-module.exports.run = async (message, args) => {
-    if (args.length <= 0) {
-        return await message.channel.send(await getCommandsEmbed());
-    } else {
-        const group = args[0];
-
-        if (!group) {
-            return await message.channel.send(await getCommandsEmbed());
-        }
-
-        await message.channel.send(await getCommandsEmbed(group));
-    }
+    return await message.channel.send(commandEmbed);
 }
 
 module.exports.config = {
-    name: "Avatar",
+    name: "Help",
     command: "help"
 }
