@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
-const Command = require('../Models/CommandModel');
+const Command = require('../models/command.model');
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (message, args) => {
     try {
         if (!args.length) {
             await Command.find({}, async function(err, commands) {
@@ -21,10 +21,11 @@ module.exports.run = async (client, message, args) => {
         }
     } catch (err) {
         console.log(err);
-        message.channel.send("Ocurrió un error al obtener la ayuda").then(msg => msg.delete({ timeout: 3000 }));
+        message.channel.send("Error displaying help menu").then(msg => msg.delete({ timeout: 3000 }));
     }
 }
 
 module.exports.config = {
+    name: "Avatar",
     command: "help"
 }

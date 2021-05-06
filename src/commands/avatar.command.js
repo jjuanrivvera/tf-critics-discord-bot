@@ -1,10 +1,10 @@
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (message, args) => {
     try {
         if (args.length) {
             const user = message.mentions.users.first();
 
             if (!user) {
-                message.channel.send("Menciona a un usuario válido").then(msg => msg.delete({ timeout: 3000 }));
+                message.channel.send("Point a real user").then(msg => msg.delete({ timeout: 3000 }));
                 return;
             }
 
@@ -15,10 +15,11 @@ module.exports.run = async (client, message, args) => {
         message.channel.send(message.author.displayAvatarURL());
     } catch(err) {
         console.log(err);
-        message.channel.send("Ocurrió un error al obtener el avatar").then(msg => msg.delete({ timeout: 3000 }));
+        message.channel.send("Error getting user's avatar").then(msg => msg.delete({ timeout: 3000 }));
     }
 }
 
 module.exports.config = {
+    name: "Avatar",
     command: "avatar"
 }
