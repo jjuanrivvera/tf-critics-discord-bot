@@ -19,7 +19,9 @@ module.exports.run = async (message, args) => {
     }
 
     if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
-        const cases = await Case.find({});
+        const cases = await Case.find({
+            target: member.user.tag
+        });
 
         const warningsEmbed = new MessageEmbed()
             .setColor("#E67E22")
