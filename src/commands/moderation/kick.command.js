@@ -1,7 +1,7 @@
 const { MemberHelper } = require('../../helpers/index');
 
 module.exports.run = async (message, args) => {
-    if (args.length <= 0) {
+    if (!args.length) {
         return await message.channel.send("You must provide a username").then(msg => msg.delete({ timeout: 3000 }));
     }
 
