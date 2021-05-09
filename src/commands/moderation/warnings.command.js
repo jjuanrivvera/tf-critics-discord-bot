@@ -32,7 +32,7 @@ module.exports.run = async (message, args) => {
         for (const caseElement of cases) {
             warningsEmbed.addField(
                 `Case number: ${caseElement.number} | Moderator: ${caseElement.responsable}`,
-                `Reason: ${caseElement.reason} | Date: ${moment(caseElement.date).format("MMMM Do YYYY")}`
+                `**Reason:** ${caseElement.reason} | **Date:** ${moment(caseElement.date).format("MMMM Do YYYY")}`
             );
         }
 
