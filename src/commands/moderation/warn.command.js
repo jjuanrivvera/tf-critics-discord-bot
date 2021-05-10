@@ -23,9 +23,9 @@ module.exports.run = async (message, args) => {
         return message.channel.send("You must provide a reason").then(msg => msg.delete({ timeout: 3000 }));
     }
 
-    if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
+    if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {
     
-        if (await MemberHelper.memberIsProtected(member, message.guild) || member.kickable === false) {
+        if (await MemberHelper.memberIsProtected(member) || member.kickable === false) {
             await message.channel.send("I can't warn this user").then(msg => msg.delete({ timeout: 3000 }));
         } else {
             await Case.create({

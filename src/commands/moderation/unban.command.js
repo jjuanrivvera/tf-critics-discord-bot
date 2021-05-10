@@ -2,7 +2,7 @@ const { MemberHelper } = require('../../helpers/index');
 
 module.exports.run = async (message, args, client) => {
     if (args.length > 0) {
-        if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
+        if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {
             const user = client.users.cache.find(u => u.tag === args[0]);
 
             if (user) {

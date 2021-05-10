@@ -1,8 +1,8 @@
 const { Guild } = require('../models');
 
 module.exports = {
-    async memberIsProtected(member, guild) {
-        const guildModel = await Guild.findOne({ id: guild.id });
+    async memberIsProtected(member) {
+        const guildModel = await Guild.findOne({ id: member.guild.id });
         
         const hasRole = member.roles.cache.some(role => guildModel.protectedRoles.includes(role.name));
 
@@ -13,8 +13,8 @@ module.exports = {
         }
     },
 
-    async memberHasModRole(member, guild) {
-        const guildModel = await Guild.findOne({ id: guild.id });
+    async memberHasModRole(member) {
+        const guildModel = await Guild.findOne({ id: member.guild.id });
         
         const hasRole = member.roles.cache.some(role => guildModel.modRoles.includes(role.name));
 
@@ -29,6 +29,17 @@ module.exports = {
         const hasRole = member.roles.cache.some(role.name === role);
 
         if (hasRole) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    async isMuted(member) {
+        const guildModel = await Guild.findOne({ id: member.guild.id });
+        const role = member.roles.cache.find(role => role.id === guildModel.mutedRoleId);
+
+        if (role) {
             return true;
         } else {
             return false;
