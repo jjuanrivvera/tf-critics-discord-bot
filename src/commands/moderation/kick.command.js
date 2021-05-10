@@ -15,6 +15,12 @@ module.exports.run = async (message, args) => {
         }
     }
 
+    const reason = args.slice(1).join(' ');
+
+    if (!reason) {
+        return message.channel.send("You must provide a reason").then(msg => msg.delete({ timeout: 3000 }));
+    }
+
     if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {    
         if (await MemberHelper.memberIsProtected(member, message.guild) || member.kickable === false) {
             await message.channel.send("I can't kick this user").then(msg => msg.delete({ timeout: 3000 }));
@@ -28,5 +34,6 @@ module.exports.run = async (message, args) => {
 
 module.exports.config = {
     name: "Kick",
-    command: "kick"
+    command: "kick",
+    usage: "kick <use> <reason>"
 }

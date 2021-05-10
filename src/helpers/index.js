@@ -1,3 +1,4 @@
 module.exports = {
-    MemberHelper: require('./member.helper')
+    MemberHelper: require('./member.helper'),
+    GuildHelper: require('./guild.helper')
 }

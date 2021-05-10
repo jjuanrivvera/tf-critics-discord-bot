@@ -6,6 +6,7 @@ const serverSchema = new mongoose.Schema({
     prefix: "string",
     modRoles: "array",
     protectedRoles: "array",
+    mutedRoleId: "string"
 });
 
 module.exports = mongoose.model('guild', serverSchema);

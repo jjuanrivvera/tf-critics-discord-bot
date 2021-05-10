@@ -15,6 +15,12 @@ module.exports.run = async (message, args) => {
         }
     }
 
+    const reason = args.slice(1).join(' ');
+
+    if (!reason) {
+        return message.channel.send("You must provide a reason").then(msg => msg.delete({ timeout: 3000 }));
+    }
+
     if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
 
         if (await MemberHelper.memberIsProtected(member, message.guild) || member.bannable === false) {
@@ -29,5 +35,6 @@ module.exports.run = async (message, args) => {
 
 module.exports.config = {
     name: "Ban",
-    command: "ban"
+    command: "ban",
+    usage: "ban <user> <reason>"
 }
