@@ -36,10 +36,10 @@ module.exports.run = async (message, args, client) => {
         return message.channel.send(`Use the correct syntax "${this.config.usage}"`).then(msg => msg.delete({ timeout: 3000 }));
     }
 
-    if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
+    if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {
 
-        if (await MemberHelper.memberIsProtected(member, message.guild)) {
-            await message.channel.send("I can't mute this user").then(msg => msg.delete({ timeout: 3000 }));
+        if (await MemberHelper.isMuted(member)) {
+            await message.channel.send("User already muted").then(msg => msg.delete({ timeout: 3000 }));
         } else {
             const durations = {
                 m: 60,
@@ -59,6 +59,20 @@ module.exports.run = async (message, args, client) => {
             try {
                 if (seconds > 0) {
                     redisClient.set(redisKey, true, "EX", seconds);
+
+                    await expire(redisKey, async (message) => {
+                        const args = message.split("-");
+        
+                        const guildId = args[1];
+                        const memberId = args[2];
+        
+                        const guild = client.guilds.cache.find(guild => guild.id === guildId);
+                        const member = guild.members.cache.find(member => member.id === memberId);
+        
+                        member.roles.remove(role);
+        
+                        console.log(`${member.user.tag} unmuted`);
+                    });
                 } else {
                     redisClient.set(redisKey, true);
                 }
@@ -67,20 +81,6 @@ module.exports.run = async (message, args, client) => {
             }
 
             await member.roles.add(role);
-
-            await expire(redisKey, async (message) => {
-                const args = message.split("-");
-
-                const guildId = args[1];
-                const memberId = args[2];
-
-                const guild = client.guilds.cache.find(guild => guild.id === guildId);
-                const member = guild.members.cache.find(member => member.id === memberId);
-
-                member.roles.remove(role);
-
-                console.log(`${member.user.tag} unmuted`);
-            });
 
             const mutedEmbed = new MessageEmbed().setColor("#95A5A6");
             mutedEmbed.setTitle(`The user ${member.user.tag} was muted ${durationString} for "${reason}" by ${message.author.tag}`);

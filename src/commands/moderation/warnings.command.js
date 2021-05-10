@@ -18,7 +18,7 @@ module.exports.run = async (message, args) => {
         }
     }
 
-    if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
+    if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {
         const cases = await Case.find({
             target: member.user.tag
         });

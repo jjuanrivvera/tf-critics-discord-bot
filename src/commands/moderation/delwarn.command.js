@@ -8,7 +8,7 @@ module.exports.run = async (message, args) => {
         return message.channel.send("You must provide the case number").then(msg => msg.delete({ timeout: 3000 }));
     }
 
-    if (await MemberHelper.memberHasModRole(message.member, message.guild) || message.member.hasPermission('ADMINISTRATOR')) {
+    if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {
         const caseElement = await Case.findOne({
             number: args[0],
             type: "warn",
