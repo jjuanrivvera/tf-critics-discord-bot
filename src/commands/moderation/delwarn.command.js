@@ -38,5 +38,6 @@ module.exports.run = async (message, args) => {
 module.exports.config = {
     name: "Delete Warning",
     command: "delwarn",
-    usage: "delwarn <case-number>"
+    usage: "delwarn <case-number>",
+    args: true
 }

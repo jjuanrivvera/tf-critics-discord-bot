@@ -36,5 +36,6 @@ module.exports.run = async (message, args) => {
 module.exports.config = {
     name: "Ban",
     command: "ban",
-    usage: "ban <user> <reason>"
+    usage: "ban <user> <reason>",
+    args: true
 }

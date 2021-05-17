@@ -50,5 +50,6 @@ module.exports.run = async (message, args) => {
 module.exports.config = {
     name: "Warn",
     command: "warn",
-    usage: "warn <user> <reason>"
+    usage: "warn <user> <reason>",
+    args: true
 }
