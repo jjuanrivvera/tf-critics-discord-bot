@@ -96,5 +96,6 @@ module.exports.config = {
     name: "Mute",
     command: "mute",
     usage: "mute <user> <duration> <reason>",
-    example: "mute Alex#1234 2h Breaking the rules"
+    example: "mute Alex#1234 2h Breaking the rules",
+    args: true
 }

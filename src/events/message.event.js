@@ -9,6 +9,20 @@ module.exports = {
         const command = args.shift().toLowerCase(); // Command name
         const discordCommand = client.commands.get(command); // Get the discord command
 
+        if (discordCommand.config.args && !args.length) {
+            let reply = `You didn't provide any arguments!`;
+        
+            if (discordCommand.config.usage) {
+                reply += `\nThe proper usage would be: \`${discordPrefix}${discordCommand.config.usage}\``;
+            }
+
+            if (discordCommand.config.example) {
+                reply += `\nExample: \`${discordPrefix}${discordCommand.config.example}\``;
+            }
+        
+            return message.channel.send(reply);
+        }
+
         if (discordCommand) {
             try {
                 await discordCommand.run(message, args, client); //Executes the given command

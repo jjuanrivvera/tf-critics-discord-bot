@@ -52,5 +52,6 @@ module.exports.config = {
     name: "Unmute",
     command: "unmute",
     usage: "mute <user> <duration> <reason>",
-    example: "mute Alex#1234 2h Breaking the rules"
+    example: "unmute Alex#1234",
+    args: true
 }
