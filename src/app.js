@@ -7,6 +7,7 @@ const discordToken = process.env.DISCORD_TOKEN;
 module.exports = {
     loadCommands() {
         discordClient.commands = new Discord.Collection();
+        discordClient.cooldowns = new Discord.Collection();
 
         const commandFolders = fs.readdirSync('./src/commands');
 

@@ -1,4 +1,5 @@
 const discordPrefix = process.env.APP_PREFIX || 'tf!';
+const Discord = require("discord.js");
 
 module.exports = {
 	name: 'message',
@@ -8,6 +9,27 @@ module.exports = {
         const args = message.content.slice(discordPrefix.length).trim().split(" "); // Command arguments
         const command = args.shift().toLowerCase(); // Command name
         const discordCommand = client.commands.get(command); // Get the discord command
+        const { cooldowns } = client;
+
+        if (!cooldowns.has(discordCommand.config.name)) {
+            cooldowns.set(discordCommand.config.name, new Discord.Collection());
+        }
+
+        const now = Date.now();
+        const timestamps = cooldowns.get(discordCommand.config.name);
+        const cooldownAmount = (discordCommand.cooldown || 5) * 1000;
+
+        if (timestamps.has(message.author.id)) {
+            const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+            if (now < expirationTime) {
+                const timeLeft = (expirationTime - now) / 1000;
+                return message.channel.send(`Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${discordCommand.config.name}\` command.`).then(msg => msg.delete({ timeout: 3000 }))
+            }
+        }
+
+        timestamps.set(message.author.id, now);
+        setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
         if (discordCommand.config.args && !args.length) {
             let reply = `You didn't provide any arguments!`;
