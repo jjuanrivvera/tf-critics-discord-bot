@@ -8,7 +8,8 @@ module.exports = {
 
         const args = message.content.slice(discordPrefix.length).trim().split(" "); // Command arguments
         const command = args.shift().toLowerCase(); // Command name
-        const discordCommand = client.commands.get(command); // Get the discord command
+        const discordCommand = client.commands.get(command)
+            || client.commands.find(cmd => cmd.config.aliases && cmd.config.aliases.includes(command)); // Get the discord command
         const { cooldowns } = client;
 
         if (!cooldowns.has(discordCommand.config.name)) {
