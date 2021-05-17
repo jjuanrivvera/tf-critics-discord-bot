@@ -51,6 +51,7 @@ module.exports.run = async (message, args, client) => {
 module.exports.config = {
     name: "Unmute",
     command: "unmute",
+    description: "Unban a user",
     usage: "mute <user> <duration> <reason>",
     example: "unmute Alex#1234",
     args: true

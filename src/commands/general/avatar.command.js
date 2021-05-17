@@ -27,5 +27,8 @@ module.exports.run = async (message, args) => {
 
 module.exports.config = {
     name: "Avatar",
-    command: "avatar"
+    command: "avatar",
+    description: "Get user avatar",
+    usage: "avatar [user]",
+    example: "avatar @jjuanrivvera99"
 }

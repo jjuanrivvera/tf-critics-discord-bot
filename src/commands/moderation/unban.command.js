@@ -21,6 +21,8 @@ module.exports.run = async (message, args, client) => {
 module.exports.config = {
     name: "Unban",
     command: "unban",
+    description: "unban a user",
     usage: "unban <user>",
+    example: "unban @Slugger",
     args: true
 }
