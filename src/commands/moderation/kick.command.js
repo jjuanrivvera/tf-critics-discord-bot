@@ -35,6 +35,8 @@ module.exports.run = async (message, args) => {
 module.exports.config = {
     name: "Kick",
     command: "kick",
+    description: "Kick a user",
     usage: "kick <use> <reason>",
+    example: "kick @Mr.Killer For being Mr.Killer",
     args: true
 }

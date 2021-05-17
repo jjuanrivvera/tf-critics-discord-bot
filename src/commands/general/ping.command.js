@@ -4,5 +4,7 @@ module.exports.run = async (message) => {
 
 module.exports.config = {
     name: "Ping",
-    command: "ping"
+    description: "Get bot response speed",
+    command: "ping",
+    usage: "ping"
 }

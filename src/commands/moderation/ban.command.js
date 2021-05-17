@@ -36,6 +36,8 @@ module.exports.run = async (message, args) => {
 module.exports.config = {
     name: "Ban",
     command: "ban",
+    description: "Ban a user",
     usage: "ban <user> <reason>",
+    example: "ban @Slugger For being Slugger",
     args: true
 }

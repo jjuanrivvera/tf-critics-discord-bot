@@ -45,6 +45,8 @@ module.exports.run = async (message, args) => {
 module.exports.config = {
     name: "Warnings",
     command: "warnings",
+    description: "List user's warnings",
     usage: "warnings <user>",
+    example: "warnings @Alex",
     args: true
 }
