@@ -6,7 +6,7 @@ module.exports = {
 	async execute(message, client) {
 		if (!message.content.startsWith(discordPrefix) || message.author.bot || !message.guild) return;
 
-        const args = message.content.slice(discordPrefix.length).trim().split(" "); // Command arguments
+        const args = message.content.slice(discordPrefix.length).trim().split(/[ ]+/); // Command arguments
         const command = args.shift().toLowerCase(); // Command name
         const discordCommand = client.commands.get(command)
             || client.commands.find(cmd => cmd.config.aliases && cmd.config.aliases.includes(command)); // Get the discord command
