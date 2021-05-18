@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+
+  node:
+    image: node:lts-alpine
+    command: sh -c "tail -f /dev/null"
+    working_dir: /app
+    volumes:
+      - ./:/app
+    
+  bot:
+    image: node:lts-alpine
+    command: sh -c "node index.js"
+    working_dir: /app
+    volumes:
+      - ./:/app
