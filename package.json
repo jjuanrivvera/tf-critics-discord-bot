@@ -22,10 +22,15 @@
   },
   "homepage": "https://github.com/jjuanrivvera99/tf-critics-discord-bot#readme",
   "dependencies": {
+    "axios": "^0.21.1",
+    "detectlanguage": "^2.1.0",
     "discord.js": "^12.5.3",
     "dotenv": "^9.0.0",
+    "languagedetect": "^2.0.0",
     "moment": "^2.29.1",
     "mongoose": "^5.12.7",
-    "redis": "^3.1.2"
+    "qs": "^6.10.1",
+    "redis": "^3.1.2",
+    "translate": "^1.2.3"
   }
 }
