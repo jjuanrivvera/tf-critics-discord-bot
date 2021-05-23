@@ -1,20 +1,21 @@
-const { MessageEmbed } = require('discord.js');
-const prefix = process.env.APP_PREFIX || 'tf!';
 const fs = require("fs");
+const _ = require('lodash');
 
-module.exports.run = async (message, args, client) => {
+const { MessageEmbed } = require('discord.js');
+
+module.exports.run = async (message, args, client, guildModel) => {
     const { commands } = message.client;
     
     if (!args.length) {
         const helpEmbed = new MessageEmbed()
             .setAuthor(client.user.username, client.user.displayAvatarURL())
-            .setDescription(`Type \`${prefix}help [command]\` for more help eg. \`${prefix}help mute\``);
+            .setDescription(`Type \`${guildModel.prefix}help [command]\` for more help eg. \`${guildModel.prefix}help mute\``);
 
         const commandFolders = fs.readdirSync('./src/commands');
 
         for (const folder of commandFolders) {
             const field = {
-                name: folder
+                name: _.capitalize(folder)
             };
 
             const commandFiles = fs.readdirSync(`./src/commands/${folder}`).filter(file => file.endsWith('.js'));
@@ -44,7 +45,7 @@ module.exports.run = async (message, args, client) => {
     const helpEmbed = new MessageEmbed()
             .setColor('#0099ff')
             .setAuthor(client.user.username, client.user.displayAvatarURL())
-            .setTitle(`Help for ${command.config.name} command`)
+            .setTitle(`Help for ${command.config.command} command`)
             .addFields(
                 {
                     name: "Description",
@@ -53,9 +54,9 @@ module.exports.run = async (message, args, client) => {
             );
 
     if (command.config.aliases) helpEmbed.addField(`**Aliases:**`, `${command.config.aliases.join(', ')}`);
-    if (command.config.usage) helpEmbed.addField(`**Usage:**`, `${prefix}${command.config.usage}`);
+    if (command.config.usage) helpEmbed.addField(`**Usage:**`, `${guildModel.prefix}${command.config.usage}`);
     if (command.config.requireArgs) helpEmbed.addField(`**Required Args:**`, `${command.config.requireArgs}`);
-    if (command.config.example) helpEmbed.addField(`**Example:**`, `${prefix}${command.config.example}`);
+    if (command.config.example) helpEmbed.addField(`**Example:**`, `${guildModel.prefix}${command.config.example}`);
     
     helpEmbed.addField(`**Cooldown:**`, `${command.config.cooldown || 5} second(s)`);
 

@@ -1,13 +1,13 @@
 const fs = require("fs");
 
-const Discord = require("discord.js");
-const discordClient = new Discord.Client();
-const discordToken = process.env.DISCORD_TOKEN;
+const { DISCORD_TOKEN } = require('./config');
+const { Client, Collection } = require("discord.js");
+const client = new Client();
 
 module.exports = {
     loadCommands() {
-        discordClient.commands = new Discord.Collection();
-        discordClient.cooldowns = new Discord.Collection();
+        client.commands = new Collection();
+        client.cooldowns = new Collection();
 
         const commandFolders = fs.readdirSync('./src/commands');
 
@@ -15,7 +15,7 @@ module.exports = {
             const commandFiles = fs.readdirSync(`./src/commands/${folder}`).filter(file => file.endsWith('.js'));
             for (const file of commandFiles) {
                 const command = require(`./commands/${folder}/${file}`);
-                discordClient.commands.set(command.config.command, command);
+                client.commands.set(command.config.command, command);
                 console.log(`${command.config.name} Command loaded`);
             }
         }
@@ -28,14 +28,14 @@ module.exports = {
             const event = require(`./events/${file}`);
 
             if (event.once) {
-                discordClient.once(event.name, (...args) => event.execute(...args, discordClient));
+                client.once(event.name, (...args) => event.execute(...args, client));
             } else {
-                discordClient.on(event.name, (...args) => event.execute(...args, discordClient));
+                client.on(event.name, (...args) => event.execute(...args, client));
             }
         }
     },
     
     login() {
-        discordClient.login(discordToken);
+        client.login(DISCORD_TOKEN);
     }
 }

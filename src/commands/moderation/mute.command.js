@@ -1,14 +1,9 @@
 const { MemberHelper, GuildHelper } = require('../../helpers');
 const redis = require('../../config/redis');
 const { expire } = require('../../config/redis');
-const { Guild } = require('../../models');
 const { MessageEmbed } = require('discord.js');
 
-module.exports.run = async (message, args, client) => {
-    const guildModel = await Guild.findOne({
-        id: message.guild.id
-    });
-
+module.exports.run = async (message, args, client, guildModel) => {
     let role = message.guild.roles.cache.find(role => role.id === guildModel.mutedRoleId);
 
     if (!role) {
