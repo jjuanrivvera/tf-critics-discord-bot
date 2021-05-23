@@ -1,10 +1,6 @@
 const { MemberHelper } = require('../../helpers/index');
 
 module.exports.run = async (message, args) => {
-    if (!args.length) {
-        return await message.channel.send("You must provide a number").then(msg => msg.delete({ timeout: 3000 }));
-    }
-
     if (!Number.isInteger(parseInt(args[0])) || args[0] < 1) {
         return await message.channel.send("You must provide a valid number").then(msg => msg.delete({ timeout: 3000 }));
     }
@@ -22,5 +18,7 @@ module.exports.config = {
     usage: "clear <number of messages>",
     example: "clear 7",
     aliases: ['cl', 'purge', 'delete'],
+    requireArgs: 1,
+    modCommand: true,
     args: true
 }

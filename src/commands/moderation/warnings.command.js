@@ -4,10 +4,6 @@ const { Case } = require("../../models/index");
 const moment = require('moment');
 
 module.exports.run = async (message, args) => {
-    if (!args.length) {
-        return message.channel.send("You must provide a username").then(msg => msg.delete({ timeout: 3000 }));
-    }
-
     let member = message.mentions.members.first();
 
     if (!member) {
@@ -18,28 +14,26 @@ module.exports.run = async (message, args) => {
         }
     }
 
-    if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {
-        const cases = await Case.find({
-            target: member.user.tag
-        });
+    const cases = await Case.find({
+        target: member.user.tag
+    });
 
-        const warningsEmbed = new MessageEmbed()
-            .setColor("#E67E22")
-            .setTitle(`Warning logs`)
-            .addFields(
-                { name: 'User', value: `${member.user.tag}`, inline: true},
-                { name: 'Total', value:  cases.length, inline: true},
-            );
+    const warningsEmbed = new MessageEmbed()
+        .setColor("#E67E22")
+        .setTitle(`Warning logs`)
+        .addFields(
+            { name: 'User', value: `${member.user.tag}`, inline: true},
+            { name: 'Total', value:  cases.length, inline: true},
+        );
 
-        for (const caseElement of cases) {
-            warningsEmbed.addField(
-                `Case number: ${caseElement.number} | Moderator: ${caseElement.responsable}`,
-                `**Reason:** ${caseElement.reason} | **Date:** ${moment(caseElement.date).format("MMMM Do YYYY")}`
-            );
-        }
-
-        await message.channel.send(warningsEmbed);
+    for (const caseElement of cases) {
+        warningsEmbed.addField(
+            `Case number: ${caseElement.number} | Moderator: ${caseElement.responsable}`,
+            `**Reason:** ${caseElement.reason} | **Date:** ${moment(caseElement.date).format("MMMM Do YYYY")}`
+        );
     }
+
+    await message.channel.send(warningsEmbed);
 }
 
 module.exports.config = {
@@ -48,5 +42,7 @@ module.exports.config = {
     description: "List user's warnings",
     usage: "warnings <user>",
     example: "warnings @Alex",
+    requireArgs: 1,
+    modCommand: true,
     args: true
 }

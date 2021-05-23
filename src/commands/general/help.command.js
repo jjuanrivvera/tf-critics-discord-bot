@@ -54,6 +54,7 @@ module.exports.run = async (message, args, client) => {
 
     if (command.config.aliases) helpEmbed.addField(`**Aliases:**`, `${command.config.aliases.join(', ')}`);
     if (command.config.usage) helpEmbed.addField(`**Usage:**`, `${prefix}${command.config.usage}`);
+    if (command.config.requireArgs) helpEmbed.addField(`**Required Args:**`, `${command.config.requireArgs}`);
     if (command.config.example) helpEmbed.addField(`**Example:**`, `${prefix}${command.config.example}`);
     
     helpEmbed.addField(`**Cooldown:**`, `${command.config.cooldown || 5} second(s)`);
@@ -66,5 +67,6 @@ module.exports.config = {
     command: "help",
     description: "Display bot help",
     aliases: ["h"],
+    requireArgs: 0,
     usage: "help [command]"
 }

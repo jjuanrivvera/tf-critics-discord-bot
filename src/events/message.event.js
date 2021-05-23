@@ -1,5 +1,6 @@
 const discordPrefix = process.env.APP_PREFIX || 'tf!';
 const Discord = require("discord.js");
+const { MemberHelper } = require('../helpers');
 
 module.exports = {
 	name: 'message',
@@ -32,8 +33,12 @@ module.exports = {
         timestamps.set(message.author.id, now);
         setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
-        if (discordCommand.config.args && !args.length) {
-            let reply = `You didn't provide any arguments!`;
+        if (discordCommand.config.modCommand && (!await MemberHelper.memberHasModRole(message.member) && !message.member.hasPermission('ADMINISTRATOR'))) {
+            return;
+        }
+
+        if (discordCommand.config.requireArgs > args.length) {
+            let reply = `You didn't provide all arguments!`;
         
             if (discordCommand.config.usage) {
                 reply += `\nThe proper usage would be: \`${discordPrefix}${discordCommand.config.usage}\``;
@@ -51,7 +56,7 @@ module.exports = {
                 await discordCommand.run(message, args, client); //Executes the given command
             } catch (err) {
                 console.log(err);
-                await message.channel.send("An error ocurred performing this action").then(msg => msg.delete({ timeout: 3000 }))
+                await message.channel.send("An error ocurred performing this action").then(msg => msg.delete({ timeout: 3000 }));
             }
         }
 	}

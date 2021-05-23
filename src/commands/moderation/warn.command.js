@@ -19,31 +19,22 @@ module.exports.run = async (message, args) => {
 
     const reason = args.slice(1).join(' ');
 
-    if (!reason) {
-        return message.channel.send("You must provide a reason").then(msg => msg.delete({ timeout: 3000 }));
-    }
-
-    if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {
-    
-        if (await MemberHelper.memberIsProtected(member) || member.kickable === false) {
-            await message.channel.send("I can't warn this user").then(msg => msg.delete({ timeout: 3000 }));
-        } else {
-            await Case.create({
-                guildId: message.guild.id,
-                target: member.user.tag,
-                type: "warn",
-                reason: reason,
-                responsable: message.author.tag,
-                date: new Date()
-            });
-
-            const warnEmbed = new MessageEmbed().setColor("#E74C3C");
-            warnEmbed.setTitle(`The user ${member.user.tag} was warned for "${reason}" by ${message.author.tag}`);
-
-            await message.channel.send(warnEmbed);
-        }
+    if (await MemberHelper.memberIsProtected(member) || member.kickable === false) {
+        await message.channel.send("I can't warn this user").then(msg => msg.delete({ timeout: 3000 }));
     } else {
-        await message.channel.send("You are ot authorized to perform this action").then(msg => msg.delete({ timeout: 3000 }));
+        await Case.create({
+            guildId: message.guild.id,
+            target: member.user.tag,
+            type: "warn",
+            reason: reason,
+            responsable: message.author.tag,
+            date: new Date()
+        });
+
+        const warnEmbed = new MessageEmbed().setColor("#E74C3C")
+            .setDescription(`The user ${member.user.tag} was warned for "${reason}" by ${message.author.tag}`);
+
+        await message.channel.send(warnEmbed);
     }
 }
 
@@ -54,5 +45,7 @@ module.exports.config = {
     usage: "warn <user> <reason>",
     example: "warn @Alex For breaking the rules",
     cooldown: 7,
+    requireArgs: 2,
+    modCommand: true,
     args: true
 }

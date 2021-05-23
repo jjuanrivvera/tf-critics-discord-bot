@@ -2,6 +2,7 @@ const { TranslateHelper } = require('../../helpers');
 const DetectLanguage = require('detectlanguage');
 const { MessageEmbed } = require('discord.js');
 const detectlanguage = new DetectLanguage(process.env.DETECT_LANGUAGE_KEY);
+const discordPrefix = process.env.APP_PREFIX || 'tf!';
 
 module.exports.run = async (message, args) => {
     if (args.length < 2) {
@@ -21,6 +22,7 @@ module.exports.run = async (message, args) => {
     const to = args[0];
     const textToTranslate = args.slice(1).join(' ');
     const from = await detectlanguage.detectCode(textToTranslate);
+
     try {
         const text = await TranslateHelper.translate(textToTranslate, from, to);
         
@@ -41,5 +43,6 @@ module.exports.config = {
     description: "Translate a text",
     usage: "tr <language> <text>",
     example: "tr es Hi! Guys",
+    requireArgs: 2,
     args: true
 }
