@@ -30,5 +30,6 @@ module.exports.config = {
     command: "avatar",
     description: "Get user avatar",
     usage: "avatar [user]",
+    requireArgs: 0,
     example: "avatar @jjuanrivvera99"
 }

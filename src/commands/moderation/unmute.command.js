@@ -10,10 +10,6 @@ module.exports.run = async (message, args, client) => {
 
     const role = message.guild.roles.cache.find(role => role.id === guildModel.mutedRoleId);
 
-    if (!args.length) {
-        return message.channel.send("You must provide a username").then(msg => msg.delete({ timeout: 3000 }));
-    }
-
     let member = message.mentions.members.first();
 
     if (!member) {
@@ -24,27 +20,23 @@ module.exports.run = async (message, args, client) => {
         }
     }
 
-    if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {
-        if (! await MemberHelper.isMuted(member)) {
-            await message.channel.send("This user is not muted").then(msg => msg.delete({ timeout: 3000 }));
-        } else {
-            member.roles.remove(role);
-
-            const redisClient = await redis();
-
-            try {
-                redisClient.del(`muted-${message.guild.id}-${member.user.id}`);
-            } finally {
-                redisClient.quit();
-            }
-
-            const unMutedEmbed = new MessageEmbed().setColor("#95A5A6")
-                .setTitle(`The user ${member.user.tag} was unmuted by ${message.author.tag}`);
-
-            await message.channel.send(unMutedEmbed);
-        }
+    if (! await MemberHelper.isMuted(member)) {
+        await message.channel.send("This user is not muted").then(msg => msg.delete({ timeout: 3000 }));
     } else {
-        await message.channel.send("You are ot authorized to perform this action").then(msg => msg.delete({ timeout: 3000 }));
+        member.roles.remove(role);
+
+        const redisClient = await redis();
+
+        try {
+            redisClient.del(`muted-${message.guild.id}-${member.user.id}`);
+        } finally {
+            redisClient.quit();
+        }
+
+        const unMutedEmbed = new MessageEmbed().setColor("#95A5A6")
+            .setDescription(`The user ${member.user.tag} was unmuted by ${message.author.tag}`);
+
+        await message.channel.send(unMutedEmbed);
     }
 }
 
@@ -54,5 +46,7 @@ module.exports.config = {
     description: "Unban a user",
     usage: "mute <user> <duration> <reason>",
     example: "unmute Alex#1234",
+    requireArgs: 1,
+    modCommand: true,
     args: true
 }

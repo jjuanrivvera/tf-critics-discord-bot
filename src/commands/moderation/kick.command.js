@@ -1,10 +1,6 @@
 const { MemberHelper } = require('../../helpers/index');
 
 module.exports.run = async (message, args) => {
-    if (!args.length) {
-        return await message.channel.send("You must provide a username").then(msg => msg.delete({ timeout: 3000 }));
-    }
-
     let member = message.mentions.members.first();
 
     if (!member) {
@@ -16,19 +12,11 @@ module.exports.run = async (message, args) => {
     }
 
     const reason = args.slice(1).join(' ');
-
-    if (!reason) {
-        return message.channel.send("You must provide a reason").then(msg => msg.delete({ timeout: 3000 }));
-    }
-
-    if (await MemberHelper.memberHasModRole(message.member) || message.member.hasPermission('ADMINISTRATOR')) {    
-        if (await MemberHelper.memberIsProtected(member) || member.kickable === false) {
-            await message.channel.send("I can't kick this user").then(msg => msg.delete({ timeout: 3000 }));
-        } else {
-            await member.kick();
-        }
+    
+    if (await MemberHelper.memberIsProtected(member) || member.kickable === false) {
+        await message.channel.send("I can't kick this user").then(msg => msg.delete({ timeout: 3000 }));
     } else {
-        await message.channel.send("You are ot authorized to perform this action").then(msg => msg.delete({ timeout: 3000 }));
+        await member.kick(reason);
     }
 }
 
@@ -38,5 +26,7 @@ module.exports.config = {
     description: "Kick a user",
     usage: "kick <user> <reason>",
     example: "kick @Mr.Killer For being Mr.Killer",
+    requireArgs: 2,
+    modCommand: true,
     args: true
 }
