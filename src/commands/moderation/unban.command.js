@@ -1,5 +1,3 @@
-const { MemberHelper } = require('../../helpers/index');
-
 module.exports.run = async (message, args, client) => {
     const user = client.users.cache.find(u => u.tag === args[0]);
 
