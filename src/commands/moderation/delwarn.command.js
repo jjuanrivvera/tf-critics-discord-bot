@@ -1,4 +1,3 @@
-const { MemberHelper } = require('../../helpers/index');
 const { MessageEmbed } = require('discord.js');
 const { Case } = require("../../models/index");
 const moment = require('moment');

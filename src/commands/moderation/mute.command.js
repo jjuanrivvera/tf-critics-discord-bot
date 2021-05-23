@@ -1,4 +1,4 @@
-const { MemberHelper, GuildHelper } = require('../../helpers/index');
+const { MemberHelper, GuildHelper } = require('../../helpers');
 const redis = require('../../config/redis');
 const { expire } = require('../../config/redis');
 const { Guild } = require('../../models');

@@ -1,4 +1,4 @@
-const { MemberHelper } = require('../../helpers/index');
+const { MemberHelper } = require('../../helpers');
 
 module.exports.run = async (message, args) => {
     let member = message.mentions.members.first();

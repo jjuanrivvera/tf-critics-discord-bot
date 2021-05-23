@@ -1,4 +1,4 @@
-const { MemberHelper, GuildHelper } = require('../../helpers/index');
+const { MemberHelper } = require('../../helpers');
 const { Guild } = require('../../models');
 const { MessageEmbed } = require('discord.js');
 const redis = require('../../config/redis');
