@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
-const serverSchema = new mongoose.Schema({
+const guildSchema = new mongoose.Schema({
     id: "string",
     name: "string",
     prefix: "string",
     modRoles: "array",
     protectedRoles: "array",
-    mutedRoleId: "string"
+    mutedRoleId: "string",
+    prefix: "string"
 });
 
-module.exports = mongoose.model('guild', serverSchema);
+module.exports = mongoose.model('guild', guildSchema);

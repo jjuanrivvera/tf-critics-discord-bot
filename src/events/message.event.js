@@ -1,20 +1,30 @@
-const discordPrefix = process.env.APP_PREFIX || 'tf!';
-const Discord = require("discord.js");
+const { Collection } = require("discord.js");
 const { MemberHelper } = require('../helpers');
+const { Guild } = require('../models');
 
 module.exports = {
 	name: 'message',
 	async execute(message, client) {
-		if (!message.content.startsWith(discordPrefix) || message.author.bot || !message.guild) return;
+        if (message.author.bot) return;
 
-        const args = message.content.slice(discordPrefix.length).trim().split(/[ ]+/); // Command arguments
+        const guildModel = await Guild.findOne({
+			id: message.guild.id
+		});
+
+		if (!guildModel) return;
+
+		if (!message.content.startsWith(guildModel.prefix)) return;
+
+        const args = message.content.slice(guildModel.prefix.length).trim().split(/[ ]+/); // Command arguments
         const command = args.shift().toLowerCase(); // Command name
         const discordCommand = client.commands.get(command)
             || client.commands.find(cmd => cmd.config.aliases && cmd.config.aliases.includes(command)); // Get the discord command
         const { cooldowns } = client;
 
+        if (!discordCommand) return;
+
         if (!cooldowns.has(discordCommand.config.name)) {
-            cooldowns.set(discordCommand.config.name, new Discord.Collection());
+            cooldowns.set(discordCommand.config.name, new Collection());
         }
 
         const now = Date.now();
@@ -41,11 +51,11 @@ module.exports = {
             let reply = `You didn't provide all arguments!`;
         
             if (discordCommand.config.usage) {
-                reply += `\nThe proper usage would be: \`${discordPrefix}${discordCommand.config.usage}\``;
+                reply += `\nThe proper usage would be: \`${guildModel.prefix}${discordCommand.config.usage}\``;
             }
 
             if (discordCommand.config.example) {
-                reply += `\nExample: \`${discordPrefix}${discordCommand.config.example}\``;
+                reply += `\nExample: \`${guildModel.prefix}${discordCommand.config.example}\``;
             }
         
             return message.channel.send(reply);
@@ -53,7 +63,7 @@ module.exports = {
 
         if (discordCommand) {
             try {
-                await discordCommand.run(message, args, client); //Executes the given command
+                await discordCommand.run(message, args, client, guildModel); //Executes the given command
             } catch (err) {
                 console.log(err);
                 await message.channel.send("An error ocurred performing this action").then(msg => msg.delete({ timeout: 3000 }));
