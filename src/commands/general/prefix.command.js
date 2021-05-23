@@ -18,5 +18,6 @@ module.exports.config = {
 	aliases: ['p'],
     requireArgs: 1,
     usage: "prefix <prefix>",
-	example: "prefix !"
+	example: "prefix !",
+	modCommand: true
 }
