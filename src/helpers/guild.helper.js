@@ -51,5 +51,11 @@ module.exports = {
                 console.log(`Could not overwrite ${createdRole.name} permissions over ${channel.id}`);
             }
         });
-    }
+    },
+
+    async mute(guild, user, duration, reason) {
+
+    },
+
+    async warn(guild, user, reason) {}
 }
