@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { Case } = require("../../models/index");
+const { Case } = require("../../models");
 const moment = require('moment');
 
 module.exports.run = async (message, args) => {
@@ -14,7 +14,8 @@ module.exports.run = async (message, args) => {
     }
 
     const cases = await Case.find({
-        target: member.user.tag
+        target: member.user.tag,
+        type: 'warn'
     });
 
     const warningsEmbed = new MessageEmbed()
