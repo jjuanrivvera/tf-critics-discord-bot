@@ -4,6 +4,7 @@ const Counter = require("./counter.model");
 
 const caseSchema = new mongoose.Schema({
     guildId: "string",
+    memberId: "string",
     number: "string",
     type: "string",
     reason: "string",

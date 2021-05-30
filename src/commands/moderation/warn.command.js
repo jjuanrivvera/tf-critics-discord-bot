@@ -1,6 +1,6 @@
 const { MemberHelper } = require('../../helpers');
 const { MessageEmbed } = require('discord.js');
-const { Case } = require("../../models/index");
+const { Case } = require("../../models");
 
 module.exports.run = async (message, args) => {
     if (!args.length) {
@@ -24,6 +24,7 @@ module.exports.run = async (message, args) => {
     } else {
         await Case.create({
             guildId: message.guild.id,
+            memberId: member.id,
             target: member.user.tag,
             type: "warn",
             reason: reason,
