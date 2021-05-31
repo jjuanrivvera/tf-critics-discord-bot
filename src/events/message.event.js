@@ -9,15 +9,17 @@ module.exports = {
 	async execute(message, client) {
         if (message.author.bot) return;
 
-        spam.log(message, 50);
+        // spam.log(message, 50);
 
-        if(spam.tooQuick(5, 3000)){
-            return message.channel.send(`Stop spamming ${message.author}`).then(msg => msg.delete({ timeout: 3000}));
-        }
+        // if(spam.tooQuick(5, 3000)) {
+        //     message.channel.bulkDelete(4);
+        //     return message.channel.send(`Stop spamming ${message.author}`).then(msg => msg.delete({ timeout: 3000}));
+        // }
 
-        if(spam.sameMessages(3, 60000)){
-            return message.channel.send(`Stop spamming ${message.author}`).then(msg => msg.delete({ timeout: 3000}));
-        }
+        // if(spam.sameMessages(3, 60000)) {
+        //     message.channel.bulkDelete(2);
+        //     return message.channel.send(`Stop spamming ${message.author}`).then(msg => msg.delete({ timeout: 3000}));
+        // }
 
         const guildModel = await Guild.findOne({
 			id: message.guild.id

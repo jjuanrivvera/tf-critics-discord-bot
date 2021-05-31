@@ -9,7 +9,7 @@ module.exports.run = async (message, args) => {
         member = await message.guild.members.cache.find(member => member.user.tag === args[0]);
 
         if (!member) {
-            return message.channel.send("Provide a valid username").then(msg => msg.delete({ timeout: 3000 }));
+            member = message.member;
         }
     }
 
@@ -40,9 +40,9 @@ module.exports.config = {
     name: "Warnings",
     command: "warnings",
     description: "List user's warnings",
-    usage: "warnings <user>",
+    usage: "warnings [user]",
     example: "warnings @Alex",
-    requireArgs: 1,
+    requireArgs: 0,
     modCommand: true,
     args: true
 }

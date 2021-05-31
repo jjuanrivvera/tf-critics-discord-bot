@@ -1,6 +1,5 @@
 const { MemberHelper } = require('../../helpers');
 const { MessageEmbed } = require('discord.js');
-const { Case } = require("../../models");
 
 module.exports.run = async (message, args) => {
     if (!args.length) {
@@ -22,18 +21,10 @@ module.exports.run = async (message, args) => {
     if (await MemberHelper.memberIsProtected(member) || member.kickable === false) {
         await message.channel.send("I can't warn this user").then(msg => msg.delete({ timeout: 3000 }));
     } else {
-        await Case.create({
-            guildId: message.guild.id,
-            memberId: member.id,
-            target: member.user.tag,
-            type: "warn",
-            reason: reason,
-            responsable: message.author.tag,
-            date: new Date()
-        });
+        await MemberHelper.warn(message, member, reason, message.author.tag);
 
         const warnEmbed = new MessageEmbed().setColor("#E74C3C")
-            .setDescription(`The user ${member.user.tag} was warned for "${reason}" by ${message.author.tag}`);
+            .setDescription(`The user ${member.user} was warned for "${reason}" by ${message.author}`);
 
         await message.channel.send(warnEmbed);
     }

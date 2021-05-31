@@ -1,9 +1,9 @@
 const { MemberHelper } = require('../../helpers');
-const { Guild } = require('../../models');
+const { Case, Guild } = require('../../models');
 const { MessageEmbed } = require('discord.js');
 const redis = require('../../config/redis');
 
-module.exports.run = async (message, args, client) => {
+module.exports.run = async (message, args) => {
     const guildModel = await Guild.findOne({
         id: message.guild.id
     });
@@ -25,13 +25,12 @@ module.exports.run = async (message, args, client) => {
     } else {
         member.roles.remove(role);
 
-        const redisClient = await redis();
+        await Case.deleteOne({
+            type: 'mute',
+            memberId: member.id
+        });
 
-        try {
-            redisClient.del(`muted-${message.guild.id}-${member.user.id}`);
-        } finally {
-            redisClient.quit();
-        }
+        redis.client.del(`muted-${message.guild.id}-${member.user.id}`);
 
         const unMutedEmbed = new MessageEmbed().setColor("#95A5A6")
             .setDescription(`The user ${member.user.tag} was unmuted by ${message.author.tag}`);
