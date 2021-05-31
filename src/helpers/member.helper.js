@@ -108,5 +108,12 @@ module.exports = {
         });
 
         message.client.emit('warn', message, member);
+    },
+
+    async clearWarnings(guild, member) {
+        await Case.deleteMany({
+            guildId: guild.id,
+            memberId: member.id
+        });
     }
 }
