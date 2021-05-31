@@ -25,6 +25,7 @@ jobs:
       - name: Apply changes
         run: |
           cd /home/jjuanrivvera99/repos/tf-critics-discord-bot
+          git checkout .
           git pull origin master
           docker-compose exec -T node sh -c "npm i"
           docker-compose down
