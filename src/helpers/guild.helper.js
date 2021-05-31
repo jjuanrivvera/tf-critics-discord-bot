@@ -32,6 +32,18 @@ module.exports = {
         return createdRole;
     },
 
+    async getMutedRole(guild){
+        const guildModel = await Guild.findOne({
+            id: guild.id
+        });
+
+        if (guildModel) {
+            return guild.roles.cache.find(role => role.id === guildModel.mutedRoleId);
+        } else {
+            return null;
+        }
+    },
+
     async refreshMutedRolePermissions(guild) {
         const guildModel = await Guild.findOne({
             id: guild.id
