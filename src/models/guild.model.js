@@ -7,6 +7,7 @@ const guildSchema = new mongoose.Schema({
     modRoles: "array",
     protectedRoles: "array",
     mutedRoleId: "string",
+    bannedWords: "array",
     prefix: "string"
 });
 
