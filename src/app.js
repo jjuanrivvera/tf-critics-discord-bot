@@ -10,6 +10,7 @@ module.exports = {
     loadCommands() {
         client.commands = new Collection();
         client.cooldowns = new Collection();
+        client.messageCooldowns = new Collection();
 
         const commandFolders = fs.readdirSync('./src/commands');
 
