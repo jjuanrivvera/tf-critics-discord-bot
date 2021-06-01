@@ -20,6 +20,13 @@ module.exports.run = async (message, args) => {
         userId: member.user.id
     });
 
+    if (!profile) {
+        profile = await Profile.create({
+            guildId: message.guild.id,
+            userId: member.user.id
+        });
+    }
+
     const neededXp = GuildHelper.getNeedExperienceToLevelUp(profile.level + 1);
 
     const canvas = createCanvas(1400, 333);
