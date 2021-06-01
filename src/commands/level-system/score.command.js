@@ -10,7 +10,7 @@ module.exports.run = async (message, args) => {
         member = await message.guild.members.cache.find(member => member.user.tag === args[0]);
 
         if (!member) {
-            member = message.member;
+            return message.channel.send(`Point a valid member`).then(msg => msg.delete({ timeout: 3000 }));
         }
     }
 
@@ -26,13 +26,16 @@ module.exports.run = async (message, args) => {
         return message.channel.send(`Use a valid score`).then(msg => msg.delete({ timeout: 3000 }));
     }
 
-    const profile = await Profile.findOne({
+    let profile = await Profile.findOne({
         guildId: message.guild.id,
         userId: member.user.id
     });
 
     if (!profile) {
-        return null;
+        profile = await Profile.create({
+            guildId: message.guild.id,
+            userId: member.user.id
+        });
     }
 
     let embedMessage = "";
