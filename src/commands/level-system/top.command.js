@@ -16,7 +16,7 @@ module.exports.run = async (message) => {
         if (member) {
             topEmbed.addField(
                 `${index + 1}. **${member.user.tag}**`,
-                `**Exp:** ${profile.xp} / ${GuildHelper.getNeedExperienceToLevelUp(profile.level + 1)} | **Level:** \`${profile.level}\``
+                `**Exp:** \`${profile.xp}\` | **Level:** \`${profile.level}\``
             );
         }
         
