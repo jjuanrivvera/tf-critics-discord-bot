@@ -27,7 +27,9 @@ module.exports.run = async (message, args) => {
         });
     }
 
-    const neededXp = GuildHelper.getNeedExperienceToLevelUp(profile.level + 1);
+    const neededXpcurrentLevel = GuildHelper.getNeedExperienceToLevelUp(profile.level);
+    const neededXp = GuildHelper.getNeedExperienceToLevelUp(profile.level + 1) - neededXpcurrentLevel;
+    const currentXp = profile.xp - neededXpcurrentLevel;
 
     const canvas = createCanvas(1400, 333);
 
@@ -48,14 +50,14 @@ module.exports.run = async (message, args) => {
 
     context.fillStyle = "#e67e22";
     context.globalAlpha = 0.6;
-    context.fillRect(180, 216, ((100 / neededXp) * profile.xp) * 9, 65);
+    context.fillRect(180, 216, ((100 / neededXp) * currentXp) * 9, 65);
     context.fill();
     context.globalAlpha = 1;
 
     context.font = "30px Roboto";
     context.textAlign = "center";
     context.fillStyle = "#ffffff";
-    context.fillText(`${profile.xp} / ${neededXp} XP`, 650, 260);
+    context.fillText(`${currentXp} / ${neededXp} XP`, 650, 260);
 
     context.font = "50px Roboto";
     context.textAlign = "left";
