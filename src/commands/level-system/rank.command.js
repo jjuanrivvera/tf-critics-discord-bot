@@ -21,7 +21,7 @@ module.exports.run = async (message, args) => {
     const rankEmbed = new MessageEmbed()
         .setColor('#0099ff')
         .setAuthor(member.user.username, member.user.displayAvatarURL())
-        .setDescription(`Your current level is \`${profile.level}\`\n**Expirience:** ${profile.xp}/${GuildHelper.getNeedExperienceToLevelUp(profile.level + 1)}`)
+        .setDescription(`Your current level is \`${profile.level}\`\n**Experience:** ${profile.xp}/${GuildHelper.getNeedExperienceToLevelUp(profile.level + 1)}`)
         .setTimestamp();
 
     return message.channel.send(rankEmbed);
