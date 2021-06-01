@@ -1,6 +1,8 @@
+const { join } = require('path');
+const { createCanvas, loadImage } = require('canvas');
 const { Profile } = require('../../models');
 const { GuildHelper } = require('../../helpers');
-const { MessageEmbed } = require('discord.js');
+const { MessageAttachment } = require('discord.js');
 
 module.exports.run = async (message, args) => {
     let member = message.mentions.members.first();
@@ -18,13 +20,57 @@ module.exports.run = async (message, args) => {
         userId: member.user.id
     });
 
-    const rankEmbed = new MessageEmbed()
-        .setColor('#0099ff')
-        .setAuthor(member.user.username, member.user.displayAvatarURL())
-        .setDescription(`Your current level is \`${profile.level}\`\n**Experience:** ${profile.xp}/${GuildHelper.getNeedExperienceToLevelUp(profile.level + 1)}`)
-        .setTimestamp();
+    const neededXp = GuildHelper.getNeedExperienceToLevelUp(profile.level + 1);
 
-    return message.channel.send(rankEmbed);
+    const canvas = createCanvas(1400, 333);
+
+    const context = canvas.getContext("2d");
+    const background = await loadImage(join(__dirname, "..", "..", "public", "img", "rank-banner.png"));
+    context.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+    context.beginPath();
+    context.lineWidth = 4;
+    context.strokeStyle = "#ffffff";
+    context.globalAlpha = 0.2;
+    context.fillStyle = "#000000";
+    context.fillRect(180, 216, 900, 65);
+    context.fill();
+    context.globalAlpha = 1;
+    context.strokeRect(180, 216, 900, 65);
+    context.stroke();
+
+    context.fillStyle = "#e67e22";
+    context.globalAlpha = 0.6;
+    context.fillRect(180, 216, ((100 / neededXp) * profile.xp) * 9, 65);
+    context.fill();
+    context.globalAlpha = 1;
+
+    context.font = "30px Arial";
+    context.textAlign = "center";
+    context.fillStyle = "#ffffff";
+    context.fillText(`${profile.xp} / ${neededXp} XP`, 650, 260);
+
+    context.font = "50px Arial";
+    context.textAlign = "left";
+    context.fillText(member.user.tag, 300, 80);
+
+    context.font = "60px Arial";
+    context.fillText("Level: ", 300, 180);
+    context.fillText(profile.level, 470, 180);
+
+    context.arc(170, 160, 120, 0, Math.PI * 2, true);
+    context.lineWidth = 6;
+    context.strokeStyle = "#ffffff";
+    context.stroke();
+    context.closePath();
+    context.clip();
+
+    const avatar = await loadImage(member.user.displayAvatarURL({ format: "jpg"}));
+    context.drawImage(avatar, 40, 40, 250, 250);
+
+    const attatchment = new MessageAttachment(canvas.toBuffer(), "rank.png");
+
+    return message.channel.send(``, attatchment);
 }
 
 module.exports.config = {
