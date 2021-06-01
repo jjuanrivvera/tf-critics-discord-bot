@@ -1,4 +1,5 @@
-const { Guild } = require('../models');
+const { Guild, Profile } = require('../models');
+const { Collection, MessageEmbed } = require('discord.js');
 
 module.exports = {
     async createMutedRole(guild) {
@@ -32,7 +33,7 @@ module.exports = {
         return createdRole;
     },
 
-    async getMutedRole(guild){
+    async getMutedRole(guild) {
         const guildModel = await Guild.findOne({
             id: guild.id
         });
@@ -63,5 +64,106 @@ module.exports = {
                 console.log(`Could not overwrite ${createdRole.name} permissions over ${channel.id}`);
             }
         });
+    },
+
+    getNeedExperienceToLevelUp(level) {
+        if (level === 0 ) {
+            return 50;
+        }
+
+        return level * level * 100;
+    },
+
+    calculateLevel(experience) {
+        let counter = 1;
+
+        if (experience < 100) {
+            return 0;
+        }
+
+        while (true) {
+            const level = (experience / counter) / counter;
+            const nextLevel = (experience / (counter + 1)) / (counter + 1);
+
+            if (level === 100) {
+                break;
+            }
+
+            if (level > 100 && nextLevel < 100) {
+                break;
+            } else {
+                counter++;
+            }
+        }
+
+        return counter;
+    },
+
+    async checkExperience(message, client, guildModel) {
+        const {guild, member} = message;
+        const guildId = guild.id;
+        const userId = member.id;
+
+        const { messageCooldowns } = client;
+
+        if (!messageCooldowns.has(`${guildId}${userId}`)) {
+            messageCooldowns.set(`${guildId}${userId}`, new Collection());
+        }
+
+        const now = Date.now();
+        const timestamps = messageCooldowns.get(`${guildId}${userId}`);
+        const cooldownAmount = 60 * 1000;
+
+        if (timestamps.has(message.author.id)) {
+            const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+            if (now < expirationTime) {
+                return;
+            }
+        }
+        
+        const levelUpdatesChannel = guild.channels.cache.find(channel => channel.id === guildModel.levelUpdatesChannel);
+
+        const xp = Math.floor(Math.random() * (20 - 10) + 10);
+
+        const result = await Profile.findOneAndUpdate({
+            guildId,
+            userId
+        }, {
+            guildId,
+            userId,
+            $inc: {
+                xp: xp
+            }
+        }, {
+            upsert: true,
+            new: true
+        });
+
+        const calculatedLevel = this.calculateLevel(result.xp);
+
+        if (result.level < calculatedLevel) {
+            result.level = calculatedLevel;
+            await result.save();
+            
+            const levelUpEmbed = new MessageEmbed()
+                    .setColor('#0099ff')
+                    .setThumbnail('https://community.tablotv.com/uploads/default/original/2X/1/1cd4e06b14fa0e4d0c2c5ee6adb245b320bb5754.gif')
+                    .setAuthor(member.user.username, member.user.displayAvatarURL())
+                    .addFields({
+                        name: "Congratulations!!!",
+                        value: `${message.author} you have reached level \`${result.level}\``
+                    })
+                    .setTimestamp();
+
+            if (levelUpdatesChannel) {
+                await levelUpdatesChannel.send(levelUpEmbed);
+            } else {
+                await message.channel.send(levelUpEmbed);
+            }
+        }
+
+        timestamps.set(message.author.id, now);
+        setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
     }
 }
