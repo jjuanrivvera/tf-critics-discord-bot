@@ -1,5 +1,3 @@
-const { Guild } = require('../../models');
-
 module.exports.run = async (message, args, client, guildModel) => {
     const commandLength = `${guildModel.prefix}slc`.length;
     const content = message.content.slice(commandLength).trim();
