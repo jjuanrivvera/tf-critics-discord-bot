@@ -15,7 +15,7 @@ module.exports.run = async (message, args) => {
         }
     }
 
-    const profile = await Profile.findOne({
+    let profile = await Profile.findOne({
         guildId: message.guild.id,
         userId: member.user.id
     });
