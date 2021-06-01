@@ -41,7 +41,11 @@ module.exports.run = async (message, args) => {
     let embedMessage = "";
 
     if (action === "add") {
-        profile.xp = parseInt(profile.xp) + parseInt(score);
+        let newXp = parseInt(profile.xp) + parseInt(score);
+        
+        profile.xp = newXp;
+        profile.level = GuildHelper.calculateLevel(newXp);
+
         embedMessage = `${score} of XP added to user ${member.user}`;
     } else {
         if (profile.xp < parseInt(score)) {
