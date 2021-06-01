@@ -12,11 +12,14 @@ module.exports.run = async (message) => {
 
     for (const [index, profile] of profiles.entries()) {
         const member = message.guild.members.cache.find(member => member.user.id === profile.userId);
+
+        if (member) {
+            topEmbed.addField(
+                `${index + 1}. **${member.user.tag}**`,
+                `**Exp:** ${profile.xp} / ${GuildHelper.getNeedExperienceToLevelUp(profile.level + 1)} | **Level:** \`${profile.level}\``
+            );
+        }
         
-        topEmbed.addField(
-            `${index + 1}. **${member.user.tag}**`,
-            `**Exp:** ${profile.xp} / ${GuildHelper.getNeedExperienceToLevelUp(profile.level + 1)} | **Level:** \`${profile.level}\``
-        );
     }
 
     return message.channel.send(topEmbed);
