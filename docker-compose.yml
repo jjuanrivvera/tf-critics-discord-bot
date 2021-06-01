@@ -3,6 +3,7 @@ version: "3.7"
 services:
 
   node:
+    image: jjuanrivvera99/tf-discord-bot:latest
     build:
       context: ./docker
     command: sh -c "tail -f /dev/null"
@@ -11,6 +12,7 @@ services:
       - ./:/app
     
   bot:
+    image: jjuanrivvera99/tf-discord-bot:latest
     build:
       context: ./docker
     command: sh -c "node index.js"
