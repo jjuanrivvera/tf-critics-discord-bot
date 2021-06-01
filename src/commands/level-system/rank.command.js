@@ -45,16 +45,16 @@ module.exports.run = async (message, args) => {
     context.fill();
     context.globalAlpha = 1;
 
-    context.font = "30px Arial";
+    context.font = "30px Roboto";
     context.textAlign = "center";
     context.fillStyle = "#ffffff";
     context.fillText(`${profile.xp} / ${neededXp} XP`, 650, 260);
 
-    context.font = "50px Arial";
+    context.font = "50px Roboto";
     context.textAlign = "left";
     context.fillText(member.user.tag, 300, 80);
 
-    context.font = "60px Arial";
+    context.font = "60px Roboto";
     context.fillText("Level: ", 300, 180);
     context.fillText(profile.level, 470, 180);
 
