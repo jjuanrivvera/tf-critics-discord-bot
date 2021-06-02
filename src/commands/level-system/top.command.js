@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (message) => {
     const profiles = await Profile.find({
-        guildId: guild.id
+        guildId: message.guild.id
     }).sort({ xp: -1}).limit(10);
 
     const topEmbed = new MessageEmbed()
