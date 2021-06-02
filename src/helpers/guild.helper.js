@@ -1,5 +1,5 @@
 const { Guild, Profile } = require('../models');
-const { Collection, MessageEmbed } = require('discord.js');
+const { Collection, MessageEmbed, WebhookClient } = require('discord.js');
 
 module.exports = {
     async createMutedRole(guild) {
@@ -67,10 +67,6 @@ module.exports = {
     },
 
     getNeedExperienceToLevelUp(level) {
-        if (level === 0 ) {
-            return 50;
-        }
-
         return level * level * 100;
     },
 
@@ -165,5 +161,49 @@ module.exports = {
 
         timestamps.set(message.author.id, now);
         setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+    },
+
+    async log(guild, embed) {
+        const guildModel = await Guild.findOne({
+            id: guild.id
+        });
+
+        if (!guildModel || !guildModel.auditChannel) {
+            return null;
+        }
+
+        const auditChannel = guild.channels.cache.find(channel => channel.id === guildModel.auditChannel);
+
+        if (!guildModel.webHook) {
+            guildModel.webHook = await auditChannel.createWebhook(guild.client.user.username, {
+                avatar: guild.client.user.displayAvatarURL(),
+                reason: 'Audit Log'
+            });
+
+            await guildModel.save();
+        }
+
+        const webhooks = await auditChannel.fetchWebhooks();
+		let webhook = webhooks.find(wh => wh.id === guildModel.webHook.id);
+
+        if (!webhook) {
+            webhook = await auditChannel.createWebhook(guild.client.user.username, {
+                avatar: guild.client.user.displayAvatarURL(),
+                reason: 'Audit Log'
+            });
+
+            guild.webHook = webhook;
+            await guildModel.save();
+        }
+
+        try {
+            await webhook.send('', {
+                username: guild.client.user.username,
+                avatarURL: guild.client.user.displayAvatarURL(),
+                embeds: [embed],
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 }

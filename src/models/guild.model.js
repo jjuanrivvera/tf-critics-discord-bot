@@ -10,7 +10,9 @@ const guildSchema = new mongoose.Schema({
     bannedWords: "array",
     levelUpdatesChannel: "string",
     features: "array",
-    prefix: "string"
+    prefix: "string",
+    auditChannel: "string",
+    webHook: "object"
 });
 
 module.exports = mongoose.model('guild', guildSchema);
