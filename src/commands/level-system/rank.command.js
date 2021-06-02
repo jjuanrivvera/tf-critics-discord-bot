@@ -1,7 +1,7 @@
 const { join } = require('path');
 const { createCanvas, loadImage } = require('canvas');
 const { Profile } = require('../../models');
-const { GuildHelper } = require('../../helpers');
+const { GuildHelper, MemberHelper } = require('../../helpers');
 const { MessageAttachment } = require('discord.js');
 
 module.exports.run = async (message, args) => {
@@ -27,6 +27,8 @@ module.exports.run = async (message, args) => {
         });
     }
 
+    const rank = await MemberHelper.getRankNumber(message.guild, member);
+
     const neededXpcurrentLevel = GuildHelper.getNeedExperienceToLevelUp(profile.level);
     const neededXp = GuildHelper.getNeedExperienceToLevelUp(profile.level + 1) - neededXpcurrentLevel;
     let currentXp = profile.xp - neededXpcurrentLevel;
@@ -42,6 +44,8 @@ module.exports.run = async (message, args) => {
     context.drawImage(background, 0, 0, canvas.width, canvas.height);
 
     context.beginPath();
+
+    // Draw rectangle
     context.lineWidth = 4;
     context.strokeStyle = "#ffffff";
     context.globalAlpha = 0.2;
@@ -52,29 +56,53 @@ module.exports.run = async (message, args) => {
     context.strokeRect(180, 216, 900, 65);
     context.stroke();
 
+    // Draw user's info background
+    context.fillStyle = "#000000";
+    context.globalAlpha = 0.3;
+    context.fillRect(180, 35, 900, 180);
+    context.fill();
+    context.globalAlpha = 1;
+
+    // Draw rank background
+    context.fillStyle = "#000000";
+    context.globalAlpha = 0.3;
+    context.fillRect(1225, 35, 130, 70);
+    context.fill();
+    context.globalAlpha = 1;
+
+    // Draw progress bar
     context.fillStyle = "#e67e22";
     context.globalAlpha = 0.6;
     context.fillRect(180, 216, ((100 / neededXp) * currentXp) * 9, 65);
     context.fill();
     context.globalAlpha = 1;
 
+    // Draw current xp
     context.font = "30px Roboto";
     context.textAlign = "center";
     context.fillStyle = "#ffffff";
     context.fillText(`${currentXp} / ${neededXp} XP`, 650, 260);
 
+    // Draw username
     context.font = "50px Roboto";
     context.textAlign = "center";
     context.fillText(member.user.tag, 650, 80);
 
+    //Draw user's level
     context.font = "60px Roboto";
     context.textAlign = "left";
     context.fillText("Level: ", 300, 180);
     context.fillText(profile.level, 470, 180);
 
+    //Draw user's total xp
     context.textAlign = "right";
-    context.fillText(`Total: ${profile.xp}`, 1070, 180);
+    context.fillText(`Score: ${profile.xp}`, 1070, 180);
 
+    //Draw user's rank
+    context.textAlign = "center";
+    context.fillText(`#${rank}`, 1290, 90);
+
+    //Draw user's avatar
     context.arc(170, 160, 120, 0, Math.PI * 2, true);
     context.lineWidth = 6;
     context.strokeStyle = "#ffffff";

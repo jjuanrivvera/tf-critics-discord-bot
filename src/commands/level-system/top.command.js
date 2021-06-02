@@ -3,7 +3,9 @@ const { GuildHelper } = require('../../helpers');
 const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (message) => {
-    const profiles = await Profile.find({}).sort({ xp: -1}).limit(10);
+    const profiles = await Profile.find({
+        guildId: guild.id
+    }).sort({ xp: -1}).limit(10);
 
     const topEmbed = new MessageEmbed()
         .setColor('#0099ff')
