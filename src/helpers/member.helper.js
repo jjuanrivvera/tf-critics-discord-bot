@@ -1,5 +1,5 @@
 const redis = require('../config/redis');
-const { Case, Guild } = require('../models');
+const { Case, Guild, Profile } = require('../models');
 const GuildHelper = require('./guild.helper');
 
 module.exports = {
@@ -115,5 +115,17 @@ module.exports = {
             guildId: guild.id,
             memberId: member.id
         });
+    },
+
+    async getRankNumber(guild, member) {
+        const profiles = await Profile.find({
+            guildId: guild.id
+        }).sort({ xp: -1});
+
+        for (const [index, profile] of profiles.entries()) {
+            if (member.user.id === profile.userId) {
+                return index + 1;
+            }
+        }
     }
 }
