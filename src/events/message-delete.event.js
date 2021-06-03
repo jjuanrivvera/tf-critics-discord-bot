@@ -7,9 +7,9 @@ module.exports = {
         if (message.author.bot) return;
 
         const embed = new MessageEmbed()
-            .setAuthor(message.client.user, message.client.user.displayAvatarURL())
+            .setAuthor(message.author.username, message.author.displayAvatarURL())
             .setColor("RED")
-            .setDescription(`:pencil2:  **Message sent by ${message.author} in ${message.channel} has been deleted**\n\n**Content**\n\`\`\`${message.content}\`\`\``);
+            .setDescription(`:x: **Message sent by ${message.author} in ${message.channel} has been deleted**\n\n**Content**\n\`\`\`${message.content}\`\`\``);
 
         await GuildHelper.log(message.guild, embed);
 	}
