@@ -107,7 +107,7 @@ module.exports = {
             date: new Date()
         });
 
-        message.client.emit('warn', message, member);
+        message.client.emit('warn', message, member, reason, responsable);
     },
 
     async clearWarnings(guild, member) {
