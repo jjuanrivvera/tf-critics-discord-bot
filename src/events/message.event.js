@@ -49,6 +49,10 @@ module.exports = {
             return;
         }
 
+        if (discordCommand.config.adminCommand && (!message.member.hasPermission('ADMINISTRATOR'))) {
+            return;
+        }
+
         if (discordCommand.config.requireArgs > args.length) {
             let reply = `You didn't provide all arguments!`;
         
