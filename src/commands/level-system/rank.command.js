@@ -42,7 +42,7 @@ module.exports.run = async (message, args) => {
     const canvas = createCanvas(1400, 333);
 
     const context = canvas.getContext("2d");
-    const background = await loadImage(join(__dirname, "..", "..", "public", "img", "rank-banner.png"));
+    const background = await loadImage(join(__dirname, "..", "..", "public", "img", "rank-banner-3.png"));
     context.drawImage(background, 0, 0, canvas.width, canvas.height);
 
     context.beginPath();
@@ -59,18 +59,18 @@ module.exports.run = async (message, args) => {
     context.stroke();
 
     // Draw user's info background
-    context.fillStyle = "#000000";
-    context.globalAlpha = 0.3;
-    context.fillRect(180, 35, 900, 180);
-    context.fill();
-    context.globalAlpha = 1;
+    // context.fillStyle = "#000000";
+    // context.globalAlpha = 0.3;
+    // context.fillRect(180, 35, 900, 180);
+    // context.fill();
+    // context.globalAlpha = 1;
 
     // Draw rank background
-    context.fillStyle = "#000000";
-    context.globalAlpha = 0.3;
-    context.fillRect(1225, 35, 130, 70);
-    context.fill();
-    context.globalAlpha = 1;
+    // context.fillStyle = "#000000";
+    // context.globalAlpha = 0.3;
+    // context.fillRect(1225, 35, 130, 70);
+    // context.fill();
+    // context.globalAlpha = 1;
 
     // Draw progress bar
     context.fillStyle = "#e67e22";
@@ -102,6 +102,7 @@ module.exports.run = async (message, args) => {
 
     //Draw user's rank
     context.textAlign = "center";
+    context.font = "bold 60px Roboto";
     context.fillText(`#${rank}`, 1290, 90);
 
     //Draw user's avatar
@@ -112,7 +113,7 @@ module.exports.run = async (message, args) => {
     context.closePath();
     context.clip();
 
-    const avatar = await loadImage(member.user.displayAvatarURL({ format: "jpg"}));
+    const avatar = await loadImage(member.user.displayAvatarURL({ format: "jpg", size: 1024}));
     context.drawImage(avatar, 40, 40, 250, 250);
 
     const attatchment = new MessageAttachment(canvas.toBuffer(), "rank.png");
