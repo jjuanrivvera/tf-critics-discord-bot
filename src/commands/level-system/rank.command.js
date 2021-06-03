@@ -15,6 +15,8 @@ module.exports.run = async (message, args) => {
         }
     }
 
+    message.channel.startTyping();
+
     let profile = await Profile.findOne({
         guildId: message.guild.id,
         userId: member.user.id
@@ -114,6 +116,8 @@ module.exports.run = async (message, args) => {
     context.drawImage(avatar, 40, 40, 250, 250);
 
     const attatchment = new MessageAttachment(canvas.toBuffer(), "rank.png");
+
+    message.channel.stopTyping();
 
     return message.channel.send(``, attatchment);
 }
