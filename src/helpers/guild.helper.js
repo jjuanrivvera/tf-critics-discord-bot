@@ -174,17 +174,8 @@ module.exports = {
 
         const auditChannel = guild.channels.cache.find(channel => channel.id === guildModel.auditChannel);
 
-        if (!guildModel.webHook) {
-            guildModel.webHook = await auditChannel.createWebhook(guild.client.user.username, {
-                avatar: guild.client.user.displayAvatarURL(),
-                reason: 'Audit Log'
-            });
-
-            await guildModel.save();
-        }
-
         const webhooks = await auditChannel.fetchWebhooks();
-		let webhook = webhooks.find(wh => wh.id === guildModel.webHook.id);
+		let webhook = webhooks.find(wh => wh.owner.id === guild.client.user.id);
 
         if (!webhook) {
             webhook = await auditChannel.createWebhook(guild.client.user.username, {
@@ -192,7 +183,6 @@ module.exports = {
                 reason: 'Audit Log'
             });
 
-            guild.webHook = webhook;
             await guildModel.save();
         }
 
