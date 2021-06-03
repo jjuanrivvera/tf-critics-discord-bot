@@ -1,10 +1,10 @@
 const { Profile } = require('../models');
-const { MemberHelper } = require('../helpers');
+const { MemberHelper, GuildHelper } = require('../helpers');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'warn',
-	async execute(message, member) {
+	async execute(message, member, reason, responsable) {
         let profile = await Profile.findOne({
             guildId: message.guild.id,
             userId: member.user.id
@@ -30,5 +30,12 @@ module.exports = {
         }
 
         await profile.save();
+
+        const warnEmbed = new MessageEmbed().setColor("#E74C3C")
+            .setDescription(`The user ${member.user} was warned for "${reason}" by ${responsable}`);
+
+        await GuildHelper.log(message.guild, warnEmbed);
+
+        return message.channel.send(warnEmbed);
 	}
 };

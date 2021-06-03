@@ -22,11 +22,6 @@ module.exports.run = async (message, args) => {
         await message.channel.send("I can't warn this user").then(msg => msg.delete({ timeout: 3000 }));
     } else {
         await MemberHelper.warn(message, member, reason, message.author.tag);
-
-        const warnEmbed = new MessageEmbed().setColor("#E74C3C")
-            .setDescription(`The user ${member.user} was warned for "${reason}" by ${message.author}`);
-
-        await message.channel.send(warnEmbed);
     }
 }
 
