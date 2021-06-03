@@ -28,6 +28,7 @@ module.exports.config = {
     aliases: ['slc'],
     example: "set-levelup-channel #level-up",
     usage: "set-levelup-channel <channel>",
+    adminCommand: true,
     requireArgs: 1,
     args: true
 }

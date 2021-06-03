@@ -19,5 +19,5 @@ module.exports.config = {
     requireArgs: 1,
     usage: "prefix <prefix>",
 	example: "prefix !",
-	modCommand: true
+	adminCommand: true
 }
