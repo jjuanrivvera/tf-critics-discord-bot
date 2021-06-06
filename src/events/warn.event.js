@@ -35,7 +35,5 @@ module.exports = {
             .setDescription(`The user ${member.user} was warned for "${reason}" by ${responsable}`);
 
         await GuildHelper.log(message.guild, warnEmbed);
-
-        return message.channel.send(warnEmbed);
 	}
 };
