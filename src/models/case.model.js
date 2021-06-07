@@ -17,7 +17,7 @@ const caseSchema = new mongoose.Schema({
 
 caseSchema.pre('save', function(next) {
     var doc = this;
-    Counter.findOneAndUpdate({_id: 'caseNumber', guildId: this.guildId}, {$inc: { seq: 1} }, function(error, counter) {
+    Counter.findOneAndUpdate({type: 'caseNumber', guildId: this.guildId}, {$inc: { seq: 1} }, function(error, counter) {
         if (error) {
             return next(error);
         }
