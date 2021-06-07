@@ -5,7 +5,9 @@ module.exports.run = async (message) => {
 
     const { name, owner, region, memberCount} = guild;
 
-    const icon = guild.iconURL();
+    const icon = guild.iconURL({
+        size: 1024
+    });
 
     const categories = guild.channels.cache.filter(c => c.type === "category").size;
     const voice = guild.channels.cache.filter(c => c.type === "voice").size;
