@@ -10,6 +10,7 @@ module.exports = {
         const embed = new MessageEmbed()
             .setColor('RED')
             .setDescription(`**Member Left**\n\n${member.user} ${member.user.tag}`)
+            .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 
         await GuildHelper.log(guild, embed);
