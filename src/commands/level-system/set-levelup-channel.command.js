@@ -3,7 +3,7 @@ module.exports.run = async (message, args, client, guildModel) => {
     const content = message.content.slice(commandLength).trim();
 
     if (args[0] == "off") {
-        guildModel.levelUpdatesChannel = null;
+        guildModel.alerts.levelup = null;
         await guildModel.save();
 
         return message.channel.send("LevelUp channel successfully removed").then(msg => msg.delete({ timeout: 4000 }));
@@ -12,7 +12,7 @@ module.exports.run = async (message, args, client, guildModel) => {
     if (content.startsWith('<#') && content.endsWith('>')) {
         const channel = message.content.replace(/\D/g,'');
 
-        guildModel.levelUpdatesChannel = channel;
+        guildModel.alerts.levelup = channel;
         await guildModel.save();
 
         message.channel.send("LevelUp channel successfully set").then(msg => msg.delete({ timeout: 4000 }));

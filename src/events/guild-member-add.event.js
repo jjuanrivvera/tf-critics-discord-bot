@@ -30,5 +30,6 @@ module.exports = {
             .setTimestamp();
 
         await GuildHelper.log(guild, embed);
+        await GuildHelper.welcome(guild, member);
 	}
 };
