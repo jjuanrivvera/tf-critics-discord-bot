@@ -85,7 +85,7 @@ module.exports = {
 
         await member.roles.add(role);
 
-        await Case.create({
+        const caseItem = await Case.create({
             guildId: message.guild.id,
             memberId: member.id,
             target: member.user.tag,
@@ -95,7 +95,13 @@ module.exports = {
             date: new Date()
         });
 
-        message.client.emit('mute', message, member);
+        try {
+            await member.user.send(`You were muted ${durationString} from ${message.guild.name}\n**Reason:** ${reason}`);
+        } catch (error) {
+            console.log(`Could not DM ${member.user.tag}`);
+        }
+
+        message.client.emit('mute', member, reason, durationString, caseItem);
     },
 
     async warn(message, member, reason, responsable) {
@@ -108,6 +114,12 @@ module.exports = {
             responsable: responsable,
             date: new Date()
         });
+
+        try {
+            await member.user.send(`You were warned in ${message.guild.name}\n**Reason:** ${reason}`);
+        } catch (error) {
+            console.log(`Could not DM ${member.user.tag}`);
+        }
 
         message.client.emit('warn', message, member, reason, responsable);
     },
@@ -178,6 +190,7 @@ module.exports = {
             embed.addField(`Cheaters?`, `Report them here ${cheatersChannel}`);
         }
 
+        await member.user.send(embed);
         return welcomeChannel.send(`${member}`, embed);
     },
 

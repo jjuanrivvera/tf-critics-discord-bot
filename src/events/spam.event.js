@@ -9,7 +9,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'message',
     async execute(message) {
-        if (message.author.bot) return;
+        if (message.author.bot || !message.guild) return;
 
         if (usersMap.has(message.author.id)) {
             const userData = usersMap.get(message.author.id);
