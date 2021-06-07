@@ -8,7 +8,7 @@ const guildSchema = new mongoose.Schema({
     protectedRoles: "array",
     mutedRoleId: "string",
     bannedWords: "array",
-    levelUpdatesChannel: "string",
+    alerts: "object",
     features: "array",
     prefix: "string",
     auditChannel: "string",

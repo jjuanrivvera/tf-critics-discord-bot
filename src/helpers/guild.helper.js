@@ -118,7 +118,7 @@ module.exports = {
             }
         }
         
-        const levelUpdatesChannel = guild.channels.cache.find(channel => channel.id === guildModel.levelUpdatesChannel);
+        const levelUpdatesChannel = guild.channels.cache.find(channel => channel.id === guildModel.alerts.levelup);
 
         const xp = Math.floor(Math.random() * (20 - 10) + 10);
 
@@ -195,5 +195,26 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    async welcome(guild, member) {
+        const guildModel = await Guild.findOne({
+            id: guild.id
+        });
+
+        let welcomeChannel = null;
+
+        if (!guildModel.alerts.welcome) {
+            welcomeChannel = guild.channels.cache.find(channel => channel.name === "tf-global-critics");
+        } else {
+            welcomeChannel = guild.channels.cache.find(channel => channel.id === guildModel.alerts.welcome);
+        }
+
+        const embed = new MessageEmbed()
+            .setColor('BLUE')
+            .setDescription(`Welcome aboard. Please state your TF nickname and server played, thanx.`)
+            .setTimestamp();
+
+        return welcomeChannel.send(`${member}`, embed);
     }
 }
