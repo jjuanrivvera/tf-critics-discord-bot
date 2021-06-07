@@ -6,7 +6,8 @@ module.exports.run = async (message) => {
     const { name, owner, region, memberCount} = guild;
 
     const icon = guild.iconURL({
-        size: 1024
+        size: 1024,
+        format: 'png'
     });
 
     const categories = guild.channels.cache.filter(c => c.type === "category").size;
