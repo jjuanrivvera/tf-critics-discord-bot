@@ -5,15 +5,13 @@ const { Guild } = require('../models');
 module.exports = {
     name: 'message',
     async execute(message) {
-        if (message.author.bot) return;
+        if (message.author.bot || !message.guild) return;
 
         const guildModel = await Guild.findOne({
 			id: message.guild.id
 		});
 
 		if (!guildModel) return;
-
-        guildModel.bannedWords
 
         for (const bannedWord of guildModel.bannedWords) {
             if (message.content.toLowerCase().includes(bannedWord.toLowerCase())) {
