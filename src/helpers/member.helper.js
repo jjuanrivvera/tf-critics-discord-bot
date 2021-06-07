@@ -1,4 +1,6 @@
+const { join } = require('path');
 const redis = require('../config/redis');
+const { MessageAttachment, MessageEmbed } = require('discord.js');
 const { Case, Guild, Profile } = require('../models');
 const GuildHelper = require('./guild.helper');
 
@@ -127,5 +129,80 @@ module.exports = {
                 return index + 1;
             }
         }
+    },
+
+    async welcome(guild, member) {
+        const guildModel = await Guild.findOne({
+            id: guild.id
+        });
+
+        let welcomeChannel = null;
+
+        if (!guildModel.alerts.welcome) {
+            welcomeChannel = guild.channels.cache.find(channel => channel.name === "tf-global-critics");
+        } else {
+            welcomeChannel = guild.channels.cache.find(channel => channel.id === guildModel.alerts.welcome);
+        }
+
+        if (!welcomeChannel) {
+            return;
+        }
+
+        const attachment = new MessageAttachment(join(__dirname, "..", "public", "img", "rank-banner.png"), 'banner.png');
+
+        const rulesChannel = guild.channels.cache.find(channel => channel.name === "rules");
+        const cheatersChannel = guild.channels.cache.find(channel => channel.name === "tf-cheaters-reports");
+        const photoChannel = guild.channels.cache.find(channel => channel.name === "tf-photo-gallery");
+        const videoChannel = guild.channels.cache.find(channel => channel.name === "tf-video-gallery");
+
+        const embed = new MessageEmbed()
+            .setTitle(`Welcome aboard!`)
+            .setColor('BLUE')
+            .setDescription(`Please state your TF nickname and server played, thanx.`)
+            .attachFiles(attachment)
+            .setImage('attachment://banner.png');
+
+        if (rulesChannel) {
+            embed.addField(`You may want to check our rules`, `${rulesChannel}`);
+        }
+
+        if (photoChannel) {
+            embed.addField(`Share your battle screenshots`, `${photoChannel}`);
+        }
+
+        if (videoChannel) {
+            embed.addField(`Share TF videos here`, `${videoChannel}`);
+        }
+
+        if (cheatersChannel) {
+            embed.addField(`Cheaters?`, `Report them here ${cheatersChannel}`);
+        }
+
+        return welcomeChannel.send(`${member}`, embed);
+    },
+
+    async leave(guild, member) {
+        const guildModel = await Guild.findOne({
+            id: guild.id
+        });
+
+        let leavesChannel = null;
+
+        if (!guildModel.alerts.leaves) {
+            leavesChannel = guild.channels.cache.find(channel => channel.name === "tf-global-critics");
+        } else {
+            leavesChannel = guild.channels.cache.find(channel => channel.id === guildModel.alerts.leaves);
+        }
+
+        if (!leavesChannel) {
+            return;
+        }
+
+        const embed = new MessageEmbed()
+            .setColor('RED')
+            .setDescription(`${member.user.tag} has left the building...hope he did not trip his foot on his way out...oops`)
+            .setTimestamp();
+
+        return leavesChannel.send(embed);
     }
 }
