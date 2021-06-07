@@ -12,7 +12,7 @@ module.exports = {
             id: guild.id
         });
         
-        redis.client.get(`muted-${id}`, async (err, result) => {
+        redis.client.get(`muted-${guild.id}-${id}`, async (err, result) => {
             if (err) {
                 console.log("Redis error", err);
             } else if (result) {
