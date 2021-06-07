@@ -9,7 +9,9 @@ module.exports = {
 
         const embed = new MessageEmbed()
             .setColor('RED')
-            .setDescription(`**Member Left**\n\n${member.user} ${member.user.tag}`)
+            .setAuthor(`Member Left`, member.user.displayAvatarURL())
+            .setDescription(`${member.user} ${member.user.tag}`)
+            .setThumbnail(member.user.displayAvatarURL())
             .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 

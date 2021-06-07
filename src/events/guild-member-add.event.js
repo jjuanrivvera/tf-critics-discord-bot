@@ -26,7 +26,9 @@ module.exports = {
 
         const embed = new MessageEmbed()
             .setColor('GREEN')
-            .setDescription(`**Member Joined**\n\n${member.user} ${member.user.tag}`)
+            .setAuthor(`Member Joined`, member.user.displayAvatarURL())
+            .setDescription(`${member.user} ${member.user.tag}`)
+            .setThumbnail(member.user.displayAvatarURL())
             .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 
