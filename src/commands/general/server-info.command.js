@@ -9,7 +9,7 @@ module.exports.run = async (message) => {
 
     const categories = guild.channels.cache.filter(c => c.type === "category").size;
     const voice = guild.channels.cache.filter(c => c.type === "voice").size;
-    const total = guild.channels.cache.size;
+    const total = guild.channels.cache.filter(c => c.type === "text").size;
 
     const onlineCount = guild.members.cache.filter(member => member.presence.status === 'online').size
 	
@@ -40,7 +40,7 @@ module.exports.run = async (message) => {
             },
             {
                 name: ":speech_balloon: Channels",
-                value: `**Categories:** ${categories}\n**Voice:** ${voice}\n**Total:** ${total}`,
+                value: `**Categories:** ${categories}\n**Voice:** ${voice}\n**Text:** ${total}`,
                 inline: true
             },
             {
