@@ -1,5 +1,7 @@
 const redis = require('../config/redis');
 const { Guild } = require('../models');
+const { GuildHelper } = require('../helpers');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'guildMemberAdd',
@@ -21,5 +23,12 @@ module.exports = {
                 }
             }
         });
+
+        const embed = new MessageEmbed()
+            .setColor('GREEN')
+            .setDescription(`**Member Joined**\n\n${member.user} ${member.user.tag}`)
+            .setTimestamp();
+
+        await GuildHelper.log(guild, embed);
 	}
 };
