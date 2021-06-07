@@ -1,6 +1,14 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (message, args, client, guildModel) => {
+	if (!args.length) {
+		const embed = new MessageEmbed()
+			.setAuthor(client.user.username, client.user.displayAvatarURL())
+			.setDescription(`Current prefix: \`${guildModel.prefix}\``);
+
+		return message.channel.send(embed);
+	}
+
     guildModel.prefix = args[0];
 	await guildModel.save();
 	
@@ -8,7 +16,7 @@ module.exports.run = async (message, args, client, guildModel) => {
 		.setAuthor(client.user.username, client.user.displayAvatarURL())
 		.setDescription(`Prefix changed`);
 
-	await message.channel.send(embed);
+	return message.channel.send(embed);
 }
 
 module.exports.config = {
@@ -16,7 +24,7 @@ module.exports.config = {
     description: "Change bot prefix",
     command: "prefix",
 	aliases: ['p'],
-    requireArgs: 1,
+    requireArgs: 0,
     usage: "prefix <prefix>",
 	example: "prefix !",
 	adminCommand: true
