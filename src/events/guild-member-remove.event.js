@@ -1,6 +1,6 @@
 const redis = require('../config/redis');
 const { MessageEmbed } = require('discord.js');
-const { GuildHelper } = require('../helpers');
+const { GuildHelper, MemberHelper } = require('../helpers');
 
 module.exports = {
 	name: 'guildMemberRemove',
@@ -13,5 +13,6 @@ module.exports = {
             .setTimestamp();
 
         await GuildHelper.log(guild, embed);
+        await MemberHelper.leave(guild, member);
 	}
 };

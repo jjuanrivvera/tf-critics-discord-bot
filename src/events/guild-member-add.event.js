@@ -1,6 +1,6 @@
 const redis = require('../config/redis');
 const { Guild } = require('../models');
-const { GuildHelper } = require('../helpers');
+const { GuildHelper, MemberHelper } = require('../helpers');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -30,6 +30,6 @@ module.exports = {
             .setTimestamp();
 
         await GuildHelper.log(guild, embed);
-        await GuildHelper.welcome(guild, member);
+        await MemberHelper.welcome(guild, member);
 	}
 };
