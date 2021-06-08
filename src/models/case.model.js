@@ -27,6 +27,8 @@ caseSchema.pre('save', function(next) {
             doc.number = counter.seq;
             next();
         });
+    } else {
+        next();
     }
 });
 
