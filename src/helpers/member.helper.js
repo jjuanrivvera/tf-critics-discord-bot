@@ -155,7 +155,7 @@ module.exports = {
             return;
         }
 
-        const attachment = new MessageAttachment(join(__dirname, "..", "public", "img", "rank-banner.png"), 'banner.png');
+        const attachment = new MessageAttachment(join(__dirname, "..", "public", "img", "WelcomeBG.png"), 'welcome.png');
 
         const rulesChannel = guild.channels.cache.find(channel => channel.name === "rules");
         const cheatersChannel = guild.channels.cache.find(channel => channel.name === "tf-cheaters-reports");
