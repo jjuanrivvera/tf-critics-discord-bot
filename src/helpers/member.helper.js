@@ -167,7 +167,7 @@ module.exports = {
             .setColor('BLUE')
             .setDescription(`Please state your TF nickname and server played, thanx.`)
             .attachFiles(attachment)
-            .setImage('attachment://banner.png');
+            .setImage('attachment://WelcomeBG.png');
 
         if (rulesChannel) {
             embed.addField(`You may want to check our rules`, `${rulesChannel}`);
