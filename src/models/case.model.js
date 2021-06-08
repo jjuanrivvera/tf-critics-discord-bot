@@ -10,6 +10,7 @@ const caseSchema = new mongoose.Schema({
     reason: "string",
     target: "string",
     responsable: "string",
+    status: "string",
     date: {
         type: Date
     }

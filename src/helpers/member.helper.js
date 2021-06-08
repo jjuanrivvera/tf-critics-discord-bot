@@ -67,20 +67,25 @@ module.exports = {
         const redisKey = `muted-${message.guild.id}-${member.user.id}`;
 
         if (seconds > 0) {
-            await redis.client.set(redisKey, true, "EX", seconds);
+            redis.client.set(redisKey, true, "EX", seconds);
 
             await redis.expire(redisKey, async () => {
-                await Case.deleteOne({
+                const caseItem = await Case.findOne({
                     type: 'mute',
-                    memberId: member.id
+                    memberId: member.id,
+                    status: "active",
+                    guildId: member.guild.id
                 });
+
+                caseItem.status = "inactive";
+                await caseItem.save();
 
                 member.roles.remove(role);
 
-                console.log(`${member.user.tag} unmuted`);
+                message.client.emit('unmute', member, "Auto unmute", caseItem, message.client.user.tag);
             });
         } else {
-            await redis.client.set(redisKey, true);
+            redis.client.set(redisKey, true);
         }
 
         await member.roles.add(role);
@@ -92,6 +97,7 @@ module.exports = {
             type: "mute",
             reason: reason,
             responsable: responsable,
+            status: "active",
             date: new Date()
         });
 
@@ -105,13 +111,14 @@ module.exports = {
     },
 
     async warn(message, member, reason, responsable) {
-        await Case.create({
+        const caseItem = await Case.create({
             guildId: message.guild.id,
             memberId: member.id,
             target: member.user.tag,
             type: "warn",
             reason: reason,
             responsable: responsable,
+            status: "active",
             date: new Date()
         });
 
@@ -121,13 +128,17 @@ module.exports = {
             console.log(`Could not DM ${member.user.tag}`);
         }
 
-        message.client.emit('warn', message, member, reason, responsable);
+        message.client.emit('warn', message, member, reason, caseItem);
     },
 
     async clearWarnings(guild, member) {
-        await Case.deleteMany({
+        await Case.updateMany({
             guildId: guild.id,
-            memberId: member.id
+            memberId: member.id,
+            type: "warn",
+            status: "active"
+        }, {
+            status: "inactive"
         });
     },
 
