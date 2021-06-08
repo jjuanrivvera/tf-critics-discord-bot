@@ -11,14 +11,16 @@ module.exports.run = async (message, args) => {
     if (!caseElement) {
         return message.channel.send("Wrong case number").then(msg => msg.delete({ timeout: 3000 }));
     } else {
-        await Case.deleteOne({
+        await Case.findOneAndUpdate({
             number: args[0],
             type: "warn",
+        }, {
+            status: "inactive"
         });
     }
 
-    const delWarnEmbed = new MessageEmbed().setColor("#2ECC71");
-    delWarnEmbed.setTitle(`Case number ${args[0]} deleted by ${message.author.tag}`)
+    const delWarnEmbed = new MessageEmbed().setColor("#2ECC71")
+        .setTitle(`Case number ${args[0]} deleted by ${message.author.tag}`)
         .addField('Details', `Case type: warning\nUser: ${caseElement.target}\nReason: ${caseElement.reason}\nDate: ${moment(caseElement.date).format("MMMM Do YYYY, h:mm:ss a")}`)
         .setFooter(`${moment().format()}`);
 

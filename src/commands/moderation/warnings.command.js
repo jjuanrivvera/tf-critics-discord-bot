@@ -14,7 +14,9 @@ module.exports.run = async (message, args) => {
     }
 
     const cases = await Case.find({
-        target: member.user.tag,
+        memberId: member.id,
+        guildId: member.guild.id,
+        status: "active",
         type: 'warn'
     });
 

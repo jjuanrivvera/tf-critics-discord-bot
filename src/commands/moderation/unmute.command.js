@@ -20,17 +20,26 @@ module.exports.run = async (message, args) => {
         }
     }
 
+    const reason = args.slice(1).join(' ') || `No reason specified`;
+
     if (! await MemberHelper.isMuted(member)) {
         await message.channel.send("This user is not muted").then(msg => msg.delete({ timeout: 3000 }));
     } else {
         member.roles.remove(role);
 
-        await Case.deleteOne({
+        const caseItem = await Case.findOne({
             type: 'mute',
-            memberId: member.id
+            guildId: message.guild.id,
+            memberId: member.id,
+            status: "active"
         });
 
+        caseItem.status = "inactive";
+        await caseItem.save();
+
         redis.client.del(`muted-${message.guild.id}-${member.user.id}`);
+
+        message.client.emit('unmute', member, reason, caseItem, message.author.tag);
 
         const unMutedEmbed = new MessageEmbed().setColor("#95A5A6")
             .setDescription(`The user ${member.user.tag} was unmuted by ${message.author.tag}`);
@@ -42,9 +51,9 @@ module.exports.run = async (message, args) => {
 module.exports.config = {
     name: "Unmute",
     command: "unmute",
-    description: "Unban a user",
-    usage: "mute <user> <duration> <reason>",
-    example: "unmute Alex#1234",
+    description: "Unmute a user",
+    usage: "unmute <user> [reason]",
+    example: "unmute Alex#1234 User does not deserve the mute",
     requireArgs: 1,
     modCommand: true,
     args: true

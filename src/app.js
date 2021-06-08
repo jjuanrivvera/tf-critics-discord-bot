@@ -40,7 +40,8 @@ module.exports = {
 
     async loadRedisListeners(redis) {
         const cases = await Case.find({
-            type: 'mute'
+            type: 'mute',
+            status: "active"
         });
 
         for (const caseItem of cases) {
@@ -60,9 +61,10 @@ module.exports = {
 
                 await member.roles.remove(role);
 
-                await caseItem.delete();
+                caseItem.status = "inactive";
+                await caseItem.save();
 
-                console.log(`${member.user.tag} unmuted`);
+                client.emit('unmute', member, "Auto unmute", caseItem, client.user.tag);
             });
         }
     },
