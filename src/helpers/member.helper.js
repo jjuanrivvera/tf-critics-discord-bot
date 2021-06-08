@@ -185,7 +185,12 @@ module.exports = {
             embed.addField(`Cheaters?`, `Report them here ${cheatersChannel}`);
         }
 
-        await member.user.send(embed);
+        try {
+            await member.user.send(embed);
+        } catch(error) {
+            console.log(`Could not DM user ${member.user.tag}`);
+        }
+
         return welcomeChannel.send(`${member}`, embed);
     },
 
