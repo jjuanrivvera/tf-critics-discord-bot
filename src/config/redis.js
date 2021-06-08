@@ -25,10 +25,10 @@ module.exports = {
         
         pub.send_command('config', ['set','notify-keyspace-events','Ex'], async (e, r) => {
             sub.subscribe(`__keyevent@0__:expired`, function() {
-                console.log(` [i] Subscribed to "${key}" event channel : ` + r);
+                console.log(` [i] Subscribed to "${key}" expired events: ` + r);
         
                 sub.on('message', function (channel, message) {
-                    callback(message);
+                    callback(message, this);
                 });
             });
         });

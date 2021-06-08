@@ -39,34 +39,33 @@ module.exports = {
     },
 
     async loadRedisListeners(redis) {
-        const cases = await Case.find({
-            type: 'mute',
-            status: "active"
-        });
+        redis.expire("all", async (msg) => {
+            const values = msg.split("-");
 
-        for (const caseItem of cases) {
-            const redisKey = `muted-${caseItem.guildId}-${caseItem.memberId}`;
+            const guildId = values[1];
+            const memberId = values[2];
+            const caseNumber = values[3];
 
-            await redis.expire(redisKey, async () => {
-                const guildId = caseItem.guildId;
-                const memberId = caseItem.memberId;
-
-                const guildModel = await Guild.findOne({
-                    id: guildId
-                });
-
-                const guild = client.guilds.cache.find(guild => guild.id === guildId);
-                const member = guild.members.cache.find(member => member.id === memberId);
-                const role = guild.roles.cache.find(role => role.id === guildModel.mutedRoleId);
-
-                await member.roles.remove(role);
-
-                caseItem.status = "inactive";
-                await caseItem.save();
-
-                client.emit('unmute', member, "Auto unmute", caseItem, client.user.tag);
+            const guildModel = await Guild.findOne({
+                id: guildId
             });
-        }
+
+            const caseItem = await Case.findOne({
+                guildId: guildId,
+                number: caseNumber,
+            });
+
+            const guild = client.guilds.cache.find(guild => guild.id === guildId);
+            const member = guild.members.cache.find(member => member.id === memberId);
+            const role = guild.roles.cache.find(role => role.id === guildModel.mutedRoleId);
+
+            await member.roles.remove(role);
+
+            caseItem.status = "inactive";
+            await caseItem.save();
+
+            client.emit('unmute', member, "Auto unmute", caseItem, client.user.tag);
+        });
     },
     
     login() {

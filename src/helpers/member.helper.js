@@ -64,32 +64,6 @@ module.exports = {
         const duration = durationString.match(/\d+/g);
         const seconds = duration * durations[durationType];
 
-        const redisKey = `muted-${message.guild.id}-${member.user.id}`;
-
-        if (seconds > 0) {
-            redis.client.set(redisKey, true, "EX", seconds);
-
-            await redis.expire(redisKey, async () => {
-                const caseItem = await Case.findOne({
-                    type: 'mute',
-                    memberId: member.id,
-                    status: "active",
-                    guildId: member.guild.id
-                });
-
-                caseItem.status = "inactive";
-                await caseItem.save();
-
-                member.roles.remove(role);
-
-                message.client.emit('unmute', member, "Auto unmute", caseItem, message.client.user.tag);
-            });
-        } else {
-            redis.client.set(redisKey, true);
-        }
-
-        await member.roles.add(role);
-
         const caseItem = await Case.create({
             guildId: message.guild.id,
             memberId: member.id,
@@ -100,6 +74,16 @@ module.exports = {
             status: "active",
             date: new Date()
         });
+
+        const redisKey = `muted-${message.guild.id}-${member.user.id}-${caseItem.number}`;
+
+        if (seconds > 0) {
+            redis.client.set(redisKey, true, "EX", 5);
+        } else {
+            redis.client.set(redisKey, true);
+        }
+
+        await member.roles.add(role);
 
         try {
             await member.user.send(`You were muted ${durationString} from ${message.guild.name}\n**Reason:** ${reason}`);
