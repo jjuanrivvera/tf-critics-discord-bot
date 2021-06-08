@@ -18,14 +18,16 @@ const caseSchema = new mongoose.Schema({
 
 caseSchema.pre('save', function(next) {
     var doc = this;
-    Counter.findOneAndUpdate({type: 'caseNumber', guildId: this.guildId}, {$inc: { seq: 1} }, function(error, counter) {
-        if (error) {
-            return next(error);
-        }
-
-        doc.number = counter.seq;
-        next();
-    });
+    if (!this.number) {
+        Counter.findOneAndUpdate({type: 'caseNumber', guildId: this.guildId}, {$inc: { seq: 1} }, function(error, counter) {
+            if (error) {
+                return next(error);
+            }
+    
+            doc.number = counter.seq;
+            next();
+        });
+    }
 });
 
 module.exports = mongoose.model('case', caseSchema);
