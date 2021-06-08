@@ -78,7 +78,7 @@ module.exports = {
         const redisKey = `muted-${message.guild.id}-${member.user.id}-${caseItem.number}`;
 
         if (seconds > 0) {
-            redis.client.set(redisKey, true, "EX", 5);
+            redis.client.set(redisKey, true, "EX", seconds);
         } else {
             redis.client.set(redisKey, true);
         }
