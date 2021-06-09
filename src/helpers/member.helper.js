@@ -157,10 +157,10 @@ module.exports = {
 
         const attachment = new MessageAttachment(join(__dirname, "..", "public", "img", "WelcomeBG.png"), 'welcome.png');
 
-        const rulesChannel = guild.channels.cache.find(channel => channel.name === "rules");
+        const rulesChannel = guild.channels.cache.find(channel => channel.name === "tf-critics-rules⚔");
         const cheatersChannel = guild.channels.cache.find(channel => channel.name === "tf-cheaters-reports");
-        const photoChannel = guild.channels.cache.find(channel => channel.name === "tf-photo-gallery");
-        const videoChannel = guild.channels.cache.find(channel => channel.name === "tf-video-gallery");
+        const photoChannel = guild.channels.cache.find(channel => channel.name === "tf-players-result");
+        const videoChannel = guild.channels.cache.find(channel => channel.name === "tf-battles-video");
 
         const embed = new MessageEmbed()
             .setTitle(`Welcome aboard!`)
