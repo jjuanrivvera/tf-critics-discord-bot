@@ -109,12 +109,12 @@ module.exports = {
 
 		return true;
 	},
-	userHasAccess(command, member, guild) {
+	async userHasAccess(command, member, guild) {
         let result = true;
 
         if (command.accessibility === "admin" && !member.hasPermission("ADMINISTRATOR")) {
             result = false;
-        } else if (command.accessibility === "mod" && MemberHelper.memberHasModRole(member) && !member.hasPermission("ADMINISTRATOR")) {
+        } else if (command.accessibility === "mod" && await MemberHelper.memberHasModRole(member) && !member.hasPermission("ADMINISTRATOR")) {
             result = false;
         } else if (command.accessibility === "owner" && guild.owner.id !== member.user.id) {
             result = false;
@@ -167,7 +167,7 @@ module.exports = {
 
 		return guildModel;
 	},
-	checkBannedWords(guildModel, member) {
+	async checkBannedWords(guildModel, member) {
 		if (member.hasPermission("ADMINISTRATOR")) return;
 		
 		for (const bannedWord of guildModel.bannedWords) {
