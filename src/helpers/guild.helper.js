@@ -1,5 +1,6 @@
 const { Guild, Profile } = require('../models');
-const { Collection, MessageEmbed, WebhookClient } = require('discord.js');
+const { Collection, MessageEmbed } = require('discord.js');
+const { Logger } = require('../util');
 
 module.exports = {
     async createMutedRole(guild) {
@@ -16,19 +17,7 @@ module.exports = {
 
         guildModel.mutedRoleId = createdRole.id;
         await guildModel.save();
-
-        const channels = await guild.channels.cache;
-
-        await channels.each(async channel => {
-            try {
-                await channel.updateOverwrite(createdRole, { 
-                    SPEAK: false,
-                    SEND_MESSAGES: false
-                });
-            } catch (err) {
-                console.log(`Could not overwrite ${createdRole.name} permissions over ${channel.id}`);
-            }
-        });
+        await this.refreshMutedRolePermissions(guild);
 
         return createdRole;
     },
@@ -52,6 +41,8 @@ module.exports = {
 
         const role = await guild.roles.cache.find(role => role.id === guildModel.mutedRoleId);
 
+        if (!role) return;
+
         const channels = await guild.channels.cache;
 
         await channels.each(async channel => {
@@ -61,7 +52,7 @@ module.exports = {
                     SEND_MESSAGES: false
                 });
             } catch (err) {
-                console.log(`Could not overwrite ${createdRole.name} permissions over ${channel.id}`);
+                Logger.log('error', `Could not overwrite ${createdRole.name} permissions over ${channel.id}`);
             }
         });
     },
@@ -193,7 +184,7 @@ module.exports = {
                 embeds: [embed],
             });
         } catch (error) {
-            console.log(error);
+            Logger.log('error', error);
         }
     }
 }

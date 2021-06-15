@@ -3,6 +3,7 @@ const redis = require('../config/redis');
 const { MessageAttachment, MessageEmbed } = require('discord.js');
 const { Case, Guild, Profile } = require('../models');
 const GuildHelper = require('./guild.helper');
+const { Logger } = require('../util');
 
 module.exports = {
     async memberIsProtected(member) {
@@ -88,7 +89,7 @@ module.exports = {
         try {
             await member.user.send(`You were muted ${durationString} from ${message.guild.name}\n**Reason:** ${reason}`);
         } catch (error) {
-            console.log(`Could not DM ${member.user.tag}`);
+            Logger.log('warn', `Could not DM ${member.user.tag}`);
         }
 
         message.client.emit('mute', member, reason, durationString, caseItem);
@@ -109,7 +110,7 @@ module.exports = {
         try {
             await member.user.send(`You were warned in ${message.guild.name}\n**Reason:** ${reason}`);
         } catch (error) {
-            console.log(`Could not DM ${member.user.tag}`);
+            Logger.log('warn', `Could not DM ${member.user.tag}`);
         }
 
         message.client.emit('warn', message, member, reason, caseItem);
@@ -188,7 +189,7 @@ module.exports = {
         try {
             await member.user.send(embed);
         } catch(error) {
-            console.log(`Could not DM user ${member.user.tag}`);
+            Logger.log('warn', `Could not DM user ${member.user.tag}`);
         }
 
         return welcomeChannel.send(`${member}`, embed);

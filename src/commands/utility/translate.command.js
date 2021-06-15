@@ -2,41 +2,8 @@ const { TranslateHelper } = require('../../helpers');
 const DetectLanguage = require('detectlanguage');
 const { MessageEmbed } = require('discord.js');
 const detectlanguage = new DetectLanguage(process.env.DETECT_LANGUAGE_KEY);
-const discordPrefix = process.env.APP_PREFIX || 'tf!';
 
-module.exports.run = async (message, args) => {
-    if (args.length < 2) {
-        let reply = `You didn't provide any arguments!`;
-        
-            if (this.config.usage) {
-                reply += `\nThe proper usage would be: \`${discordPrefix}${this.config.usage}\``;
-            }
-
-            if (this.config.example) {
-                reply += `\nExample: \`${discordPrefix}${this.config.example}\``;
-            }
-        
-            return message.channel.send(reply);
-    }
-
-    const to = args[0];
-    const textToTranslate = args.slice(1).join(' ');
-    const from = await detectlanguage.detectCode(textToTranslate);
-
-    try {
-        const text = await TranslateHelper.translate(textToTranslate, from, to);
-        
-        const embed = new MessageEmbed()
-            .setAuthor(message.author.username, message.author.displayAvatarURL())
-            .setDescription(text);
-
-        await message.channel.send(embed);
-    } catch (error) {
-        await message.channel.send("Language not supported").then(msg => msg.delete({ timeout: 3000 }));
-    }
-}
-
-module.exports.config = {
+module.exports = {
     name: "Translate",
     command: "translate",
     aliases: ['tr'],
@@ -44,5 +11,26 @@ module.exports.config = {
     usage: "tr <language> <text>",
     example: "tr es Hi! Guys",
     requireArgs: 2,
-    args: true
+    accessibility: "everyone",
+	clientPermissions: [
+		"SEND_MESSAGES",
+        "EMBED_LINKS"
+	],
+    async run(message, args) {
+        const to = args[0];
+        const textToTranslate = args.slice(1).join(' ');
+        const from = await detectlanguage.detectCode(textToTranslate);
+    
+        try {
+            const { text } = await TranslateHelper.translate(textToTranslate, from, to);
+            
+            const embed = new MessageEmbed()
+                .setAuthor(message.author.username, message.author.displayAvatarURL())
+                .setDescription(text);
+    
+            return message.channel.send(embed);
+        } catch (error) {
+            return message.channel.send("Language not supported").then(msg => msg.delete({ timeout: 3000 }));
+        }
+    }
 }

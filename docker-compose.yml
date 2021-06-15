@@ -13,6 +13,22 @@ services:
     
   bot:
     image: jjuanrivvera99/tf-discord-bot:latest
+    restart: always
+    environment:
+      APP_PREFIX: ${APP_PREFIX}
+      APP_ACTIVITY: ${APP_ACTIVITY}
+      APP_ACTIVITY_TYPE: ${APP_ACTIVITY_TYPE}
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DISCORD_CDN: ${DISCORD_CDN}
+      DISCORD_API: ${DISCORD_API}
+      DISCORD_BOT_ID: ${DISCORD_BOT_ID}
+      MONGO_DSN: ${MONGO_DSN}
+      REDISCLOUD_URL: ${REDISCLOUD_URL}
+      RAPIDAPI_API_KEY: ${RAPIDAPI_API_KEY}
+      LIBRE_TRANSLATE_API: ${LIBRE_TRANSLATE_API}
+      LIBRE_TRANSLATE_API_KEY: ${LIBRE_TRANSLATE_API_KEY}
+      DETECT_LANGUAGE_KEY: ${DETECT_LANGUAGE_KEY}
+      SENTRY_DSN: ${SENTRY_DSN}
     build:
       context: ./docker
     command: sh -c "node index.js"

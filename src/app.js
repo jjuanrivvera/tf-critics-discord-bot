@@ -5,6 +5,7 @@ const { Client, Collection } = require("discord.js");
 const client = new Client();
 
 const { Case, Guild } = require("./models");
+const { Logger } = require('./util');
 
 module.exports = {
     loadCommands() {
@@ -18,8 +19,8 @@ module.exports = {
             const commandFiles = fs.readdirSync(`./src/commands/${folder}`).filter(file => file.endsWith('.js'));
             for (const file of commandFiles) {
                 const command = require(`./commands/${folder}/${file}`);
-                client.commands.set(command.config.command, command);
-                console.log(`${command.config.name} Command loaded`);
+                client.commands.set(command.command, command);
+                Logger.log('info', `${command.name} Command loaded`);
             }
         }
     },
@@ -35,6 +36,8 @@ module.exports = {
             } else {
                 client.on(event.name, (...args) => event.execute(...args, client));
             }
+
+            Logger.log('info', `${event.name} event loaded`);
         }
     },
 

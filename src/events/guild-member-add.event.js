@@ -2,6 +2,7 @@ const redis = require('../config/redis');
 const { Guild } = require('../models');
 const { GuildHelper, MemberHelper } = require('../helpers');
 const { MessageEmbed } = require('discord.js');
+const { Logger } = require('../util');
 
 module.exports = {
 	name: 'guildMemberAdd',
@@ -14,7 +15,7 @@ module.exports = {
         
         redis.client.get(`muted-${guild.id}-${id}`, async (err, result) => {
             if (err) {
-                console.log("Redis error", err);
+                Logger.log('error',"Redis error", err);
             } else if (result) {
                 const role = await guild.roles.cache.find(role => role.id === guildModel.mutedRoleId);
 
