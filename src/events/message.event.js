@@ -182,7 +182,7 @@ module.exports = {
             }
         }
 	},
-	checkForSpam() {
+	async checkForSpam() {
 		if (usersMap.has(message.author.id)) {
             const userData = usersMap.get(message.author.id);
             const { lastMessage, timer } = userData;
