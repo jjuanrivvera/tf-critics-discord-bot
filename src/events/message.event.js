@@ -3,6 +3,7 @@ const { GuildHelper, MemberHelper } = require('../helpers');
 const { Guild } = require('../models');
 const { Logger } = require('../util');
 const { APP_PREFIX } = require('../config');
+const { MessageEmbed } = require('discord.js');
 const usersMap = new Map();
 const LIMIT = 5;
 const DIFF = 5000;
