@@ -19,7 +19,7 @@ module.exports = {
 
         profile.warningCount++;
 
-        if (profile.warningCount > 2) {
+        if (profile.warningCount > 3) {
             await MemberHelper.mute(message, member, '4h', 'Automute', message.client.user.tag);
             profile.warningCount = 0;
 
