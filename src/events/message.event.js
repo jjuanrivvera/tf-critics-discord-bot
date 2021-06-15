@@ -17,7 +17,7 @@ module.exports = {
 	async execute(message, client) {
         if (message.author.bot || !message.guild) return;
 
-		this.checkForSpam();
+		this.checkForSpam(message);
         
         const { guild, channel, member } = message;
         const { cooldowns } = client;
@@ -182,7 +182,7 @@ module.exports = {
             }
         }
 	},
-	async checkForSpam() {
+	async checkForSpam(message) {
 		if (usersMap.has(message.author.id)) {
             const userData = usersMap.get(message.author.id);
             const { lastMessage, timer } = userData;
