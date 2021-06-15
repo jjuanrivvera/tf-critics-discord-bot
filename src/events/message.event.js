@@ -25,7 +25,7 @@ module.exports = {
 
         const guildModel = await this.getGuildModel(guild);
 
-		this.checkBannedWords(guildModel, member);
+		this.checkBannedWords(message, guildModel, member);
 		await this.calculateExperience(guildModel, message, client);
 
 		let prefix = null;
@@ -168,7 +168,7 @@ module.exports = {
 
 		return guildModel;
 	},
-	async checkBannedWords(guildModel, member) {
+	async checkBannedWords(message, guildModel, member) {
 		if (member.hasPermission("ADMINISTRATOR")) return;
 		
 		for (const bannedWord of guildModel.bannedWords) {
