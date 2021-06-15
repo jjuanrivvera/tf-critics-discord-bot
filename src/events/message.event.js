@@ -24,7 +24,7 @@ module.exports = {
 
         const guildModel = await this.getGuildModel(guild);
 
-		this.checkBannedWords(guildModel);
+		this.checkBannedWords(guildModel, member);
 		await this.calculateExperience(guildModel, message, client);
 
 		let prefix = null;
@@ -167,7 +167,9 @@ module.exports = {
 
 		return guildModel;
 	},
-	checkBannedWords(guildModel) {
+	checkBannedWords(guildModel, member) {
+		if (member.hasPermission("ADMINISTRATOR")) return;
+		
 		for (const bannedWord of guildModel.bannedWords) {
             if (message.content.toLowerCase().includes(bannedWord.toLowerCase())) {
                 await MemberHelper.warn(message, message.member, "Automod banned words detection", message.client.user.tag);
