@@ -10,7 +10,6 @@ const guildSchema = new mongoose.Schema({
     bannedWords: "array",
     alerts: "object",
     features: "array",
-    prefix: "string",
     auditChannel: "string",
     webHook: "object"
 });

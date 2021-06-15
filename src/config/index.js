@@ -9,8 +9,10 @@ module.exports = {
     DISCORD_BOT_ID: process.env.DISCORD_BOT_ID,
 
     MONGO_DSN: process.env.MONGO_DSN,
+    SENTRY_DSN: process.env.SENTRY_DSN,
     REDISCLOUD_URL: process.env.REDISCLOUD_URL,
     LIBRE_TRANSLATE_API: process.env.LIBRE_TRANSLATE_API,
     LIBRE_TRANSLATE_API_KEY: process.env.LIBRE_TRANSLATE_API_KEY,
     DETECT_LANGUAGE_KEY: process.env.DETECT_LANGUAGE_KEY,
+    RAPIDAPI_API_KEY: process.env.RAPIDAPI_API_KEY,
 }
