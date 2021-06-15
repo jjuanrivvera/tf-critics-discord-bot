@@ -22,7 +22,12 @@ module.exports = {
 		let command = null;
 		let args = null;
 
-		if (!message.content.startsWith(guildModel.prefix)) {
+		if (message.content.startsWith(guildModel.prefix)) {
+			prefix = guildModel.prefix
+			
+			args = message.content.slice(prefix.length).trim().split(/ +/);
+			command = args.shift().toLowerCase();
+		} else if (message.content.startsWith(APP_PREFIX)) {
 			prefix = APP_PREFIX;
 
 			args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -30,10 +35,7 @@ module.exports = {
 
 			if (!this.allowedGlobalCommands.includes(command)) return;
 		} else {
-			prefix = guildModel.prefix
-			
-			args = message.content.slice(prefix.length).trim().split(/ +/);
-			command = args.shift().toLowerCase();
+			return;
 		};
 
         const discordCommand = client.commands.get(command) ||
